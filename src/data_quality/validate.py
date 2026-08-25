@@ -153,7 +153,66 @@ def check_impossible_values(df: pd.DataFrame) -> dict:
 
     return problemas
 
+def check_outliers(df: pd.DataFrame) -> dict:
+    # usamos dos metodos porque cada uno cuenta algo distinto:
+    # IQR es robusto (no le afectan mucho los extremos)
+    # Z-score asume que los datos son mas o menos normales
+    resultado = {}
 
+    for col in NUMERIC_COLUMNS:
+        q1 = df[col].quantile(0.25)
+        q3 = df[col].quantile(0.75)
+        iqr = q3 - q1
+        limite_bajo = q1 - 1.5 * iqr
+        limite_alto = q3 + 1.5 * iqr
+
+        outliers_iqr = df[(df[col] < limite_bajo) | (df[col] > limite_alto)]
+
+        z_scores = np.abs(stats.zscore(df[col]))
+        outliers_z = df[z_scores > 3]
+
+        resultado[col] = {
+            "rango_iqr": [round(limite_bajo, 2), round(limite_alto, 2)],
+            "cantidad_outliers_iqr": int(len(outliers_iqr)),
+            "cantidad_outliers_zscore": int(len(outliers_z)),
+        }
+
+    return resultado
+
+def check_skewness(df: pd.DataFrame) -> dict:
+    # skewness mide que tan "torcida" esta la distribucion
+    # cerca de 0 = mas o menos simetrica
+    resultado = {}
+
+    for col in NUMERIC_COLUMNS:
+        valor = float(stats.skew(df[col]))
+
+        if abs(valor) < 0.5:
+            interpretacion = "simetrica"
+        elif abs(valor) < 1:
+            interpretacion = "moderadamente sesgada"
+        else:
+            interpretacion = "muy sesgada"
+
+        resultado[col] = {
+            "skewness": round(valor, 3),
+            "interpretacion": interpretacion,
+        }
+
+    return resultado
+
+def check_leakage(df: pd.DataFrame) -> dict:
+    # revisamos que tan correlacionadas estan TWF/HDF/PWF/OSF/RNF
+    # con el target. se espera que sea alto, porque son sub-tipos
+    # del mismo fallo, y eso justifica excluirlas como features
+    correlaciones = {}
+
+    for col in FAILURE_MODE_COLUMNS:
+        correlaciones[col] = round(float(df[col].corr(df[TARGET_COLUMN])), 3)
+
+    return {
+        "correlacion_con_target": correlaciones,
+    }
 
 
 
@@ -214,5 +273,13 @@ if __name__ == "__main__":
     print(check_categorical_consistency(df))
     print("--- valores imposibles ---")
     print(check_impossible_values(df))
+    print("--- outliers ---")
+    print(check_outliers(df))
+
+    print("--- skewness ---")
+    print(check_skewness(df))
+
+    print("--- leakage ---")
+    print(check_leakage(df))
 
     
