@@ -95,6 +95,83 @@ def check_dtypes(df: pd.DataFrame) -> dict:
         "columnas_no_numericas_inesperadas": mal_tipeadas,
     }   
 
+def check_categorical_consistency(df: pd.DataFrame) -> dict:
+    # contamos cuantas veces aparece cada valor en Type
+    # (deberian ser solo L, M o H segun el dataset)
+    valores_type = df["Type"].value_counts().to_dict()
+
+    resultado = {
+        "Type": {
+            "valores_unicos": list(valores_type.keys()),
+            # cardinalidad = cuantos valores distintos tiene la columna
+            "cardinalidad": df["Type"].nunique(),
+            "conteo": valores_type,
+            # si aparece algo que no sea L, M o H, lo marcamos aca
+            # (podria ser un error de captura o una categoria nueva)
+            "categorias_no_esperadas": [
+                v for v in valores_type if v not in ("L", "M", "H")
+            ],
+        }
+    }
+
+    # Product ID deberia ser casi unico por fila, es como el
+    # identificador de cada maquina/registro. si la cardinalidad
+    # es mucho menor a la cantidad de filas, algo esta mal
+    resultado["Product ID"] = {
+        "cardinalidad": int(df["Product ID"].nunique()),
+        "filas_totales": int(len(df)),
+        "es_practicamente_unico": df["Product ID"].nunique() >= 0.99 * len(df),
+    }
+
+    return resultado
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     df = load_raw_data()
 
@@ -106,3 +183,7 @@ if __name__ == "__main__":
 
     print("--- tipos ---")
     print(check_dtypes(df))
+    print("--- categorias ---")
+    print(check_categorical_consistency(df))
+
+    
