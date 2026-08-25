@@ -272,22 +272,24 @@ def check_excessive_correlation(df: pd.DataFrame, umbral: float = 0.9) -> dict:
     } 
 
 def run_full_diagnostic(df: pd.DataFrame) -> dict:
-    # junta todos los chequeos en un solo reporte
+    # junta los 16 puntos del enunciado en un solo reporte
     return {
         "filas": int(len(df)),
         "columnas": int(df.shape[1]),
         "missing_values": check_missing_values(df),
         "duplicados": check_duplicates(df),
+        "valores_imposibles": check_impossible_values(df),
         "tipos": check_dtypes(df),
         "categorias": check_categorical_consistency(df),
-        "valores_imposibles": check_impossible_values(df),
+        "fechas_invalidas": "no aplica: AI4I no tiene columna de fecha, es un dataset transversal",
         "outliers": check_outliers(df),
         "skewness": check_skewness(df),
-        "leakage": check_leakage(df),
         "consistencia_unidades": check_unit_consistency(df),
+        "leakage": check_leakage(df),
         "imbalance": check_imbalance(df),
+        "gaps_temporales": "no aplica: mismo motivo que fechas_invalidas, no hay columna temporal",
         "correlacion_excesiva": check_excessive_correlation(df),
-    } 
+    }
 
 def save_report(reporte: dict) -> None:
     # crea la carpeta si no existe todavia
@@ -308,13 +310,22 @@ if __name__ == "__main__":
     reporte = run_full_diagnostic(df)
     save_report(reporte)
 
-    # resumen corto en consola, para revisar rapido sin abrir el json
-    print("\n=== RESUMEN DATA QUALITY - AI4I ===")
+    print("\n=== RESUMEN DATA QUALITY - AI4I (16 puntos) ===")
     print(f"filas: {reporte['filas']} | columnas: {reporte['columnas']}")
-    print(f"nulos totales: {reporte['missing_values']['total_celdas_nulas']}")
-    print(f"duplicados exactos: {reporte['duplicados']['duplicados_exactos']}")
-    print(f"tasa de fallo: {reporte['imbalance']['tasa_fallo']:.2%}")
-    print(f"correlacion de leakage: {reporte['leakage']['correlacion_con_target']}")
+
+    print(f"1-2. nulos y valores centinela: {reporte['missing_values']['total_celdas_nulas']} nulos totales")
+    print(f"3. duplicados: {reporte['duplicados']['duplicados_exactos']} exactos")
+    print(f"4-8. valores imposibles/inconsistentes: {reporte['valores_imposibles']}")
+    print(f"5. tipos incorrectos: {reporte['tipos']['columnas_no_numericas_inesperadas']}")
+    print(f"6-10. categorias/cardinalidad: {reporte['categorias']['Type']['cardinalidad']} valores en Type")
+    print(f"7. fechas: {reporte['fechas_invalidas']}")
+    print(f"9. outliers (Rotational speed): {reporte['outliers']['Rotational speed [rpm]']['cantidad_outliers_iqr']}")
+    print(f"11. skewness mas alta: Rotational speed = {reporte['skewness']['Rotational speed [rpm]']['skewness']}")
+    print(f"12. consistencia de unidades: {reporte['consistencia_unidades']}")
+    print(f"13. leakage: {reporte['leakage']['correlacion_con_target']}")
+    print(f"14. tasa de fallo (imbalance): {reporte['imbalance']['tasa_fallo']:.2%}")
+    print(f"15. gaps temporales: {reporte['gaps_temporales']}")
+    print(f"16. correlacion excesiva: {reporte['correlacion_excesiva']['pares_alta_correlacion']}")
 
 
     """

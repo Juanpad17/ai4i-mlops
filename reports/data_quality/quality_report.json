@@ -11,6 +11,7 @@
     "tasa_duplicados": 0.0,
     "product_id_repetidos": 0
   },
+  "valores_imposibles": {},
   "tipos": {
     "tipos_actuales": {
       "UDI": "int64",
@@ -51,7 +52,7 @@
       "es_practicamente_unico": true
     }
   },
-  "valores_imposibles": {},
+  "fechas_invalidas": "no aplica: AI4I no tiene columna de fecha, es un dataset transversal",
   "outliers": {
     "Air temperature [K]": {
       "rango_iqr": [
@@ -116,6 +117,9 @@
       "interpretacion": "simetrica"
     }
   },
+  "consistencia_unidades": {
+    "resultado": "no se detectaron mezclas de unidades, todos los valores estan en rango esperado"
+  },
   "leakage": {
     "correlacion_con_target": {
       "TWF": 0.363,
@@ -125,9 +129,6 @@
       "RNF": 0.005
     }
   },
-  "consistencia_unidades": {
-    "resultado": "no se detectaron mezclas de unidades, todos los valores estan en rango esperado"
-  },
   "imbalance": {
     "conteo_por_clase": {
       "0": 9661,
@@ -136,6 +137,7 @@
     "tasa_fallo": 0.0339,
     "ratio_normal_vs_fallo": 28.5
   },
+  "gaps_temporales": "no aplica: mismo motivo que fechas_invalidas, no hay columna temporal",
   "correlacion_excesiva": {
     "pares_alta_correlacion": [],
     "umbral_usado": 0.9
