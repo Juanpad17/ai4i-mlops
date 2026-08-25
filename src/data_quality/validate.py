@@ -124,6 +124,9 @@ def check_categorical_consistency(df: pd.DataFrame) -> dict:
     }
 
     return resultado
+# AI4I no tiene columnas de fecha, es un dataset transversal
+# (no serie de tiempo), por eso no se revisan fechas ni gaps temporales
+
 
 
 
