@@ -271,43 +271,32 @@ def check_excessive_correlation(df: pd.DataFrame, umbral: float = 0.9) -> dict:
         "umbral_usado": umbral,
     } 
 
+def run_full_diagnostic(df: pd.DataFrame) -> dict:
+    # junta todos los chequeos en un solo reporte
+    return {
+        "filas": int(len(df)),
+        "columnas": int(df.shape[1]),
+        "missing_values": check_missing_values(df),
+        "duplicados": check_duplicates(df),
+        "tipos": check_dtypes(df),
+        "categorias": check_categorical_consistency(df),
+        "valores_imposibles": check_impossible_values(df),
+        "outliers": check_outliers(df),
+        "skewness": check_skewness(df),
+        "leakage": check_leakage(df),
+        "consistencia_unidades": check_unit_consistency(df),
+        "imbalance": check_imbalance(df),
+        "correlacion_excesiva": check_excessive_correlation(df),
+    } 
 
+def save_report(reporte: dict) -> None:
+    # crea la carpeta si no existe todavia
+    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
+    with open(REPORT_PATH, "w", encoding="utf-8") as f:
+        json.dump(reporte, f, indent=2, ensure_ascii=False, default=str)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    print(f"reporte guardado en {REPORT_PATH}")
 
 
 
@@ -316,34 +305,15 @@ def check_excessive_correlation(df: pd.DataFrame, umbral: float = 0.9) -> dict:
 if __name__ == "__main__":
     df = load_raw_data()
 
-    print("--- missing values ---")
-    print(check_missing_values(df))
+    reporte = run_full_diagnostic(df)
+    save_report(reporte)
 
-    print("--- duplicados ---")
-    print(check_duplicates(df))
-
-    print("--- tipos ---")
-    print(check_dtypes(df))
-    print("--- categorias ---")
-    print(check_categorical_consistency(df))
-    print("--- valores imposibles ---")
-    print(check_impossible_values(df))
-    print("--- outliers ---")
-    print(check_outliers(df))
-
-    print("--- skewness ---")
-    print(check_skewness(df))
-
-    print("--- leakage ---")
-    print(check_leakage(df))
-
-    print("--- imbalance ---")
-    print(check_imbalance(df))
-
-    print("--- correlacion excesiva ---")
-    print(check_excessive_correlation(df))
-
-    print("--- consistencia de unidades ---")
-    print(check_unit_consistency(df))
+    # resumen corto en consola, para revisar rapido sin abrir el json
+    print("\n=== RESUMEN DATA QUALITY - AI4I ===")
+    print(f"filas: {reporte['filas']} | columnas: {reporte['columnas']}")
+    print(f"nulos totales: {reporte['missing_values']['total_celdas_nulas']}")
+    print(f"duplicados exactos: {reporte['duplicados']['duplicados_exactos']}")
+    print(f"tasa de fallo: {reporte['imbalance']['tasa_fallo']:.2%}")
+    print(f"correlacion de leakage: {reporte['leakage']['correlacion_con_target']}")
 
     
