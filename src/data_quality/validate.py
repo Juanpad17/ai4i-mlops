@@ -316,4 +316,104 @@ if __name__ == "__main__":
     print(f"tasa de fallo: {reporte['imbalance']['tasa_fallo']:.2%}")
     print(f"correlacion de leakage: {reporte['leakage']['correlacion_con_target']}")
 
-    
+
+    """
+
+Este modulo cubre los 16 puntos que pide el enunciado en la Seccion F,
+sobre el dataset crudo (10000 filas, 14 columnas). No detiene el
+pipeline, solo diagnostica y guarda evidencia; el bloqueo automatico
+(pass/fail) se hace en quality_gates.py (Seccion G).
+
+Repaso de los 16 puntos, que se encontro, y que se decidio:
+
+1. valores faltantes
+   check_missing_values() -> 0 nulos en las 14 columnas.
+   decision: no se necesita imputacion ni dropna.
+
+2. faltantes codificados con simbolos
+   check_missing_values() -> se revisaron valores negativos en las
+   columnas numericas (posible codificacion tipo -1, -200). No se
+   encontraron. decision: no se necesita tratamiento especial.
+
+3. duplicados
+   check_duplicates() -> 0 filas duplicadas, 0 Product ID repetidos.
+   decision: no se elimina ninguna fila.
+
+4. registros inconsistentes
+   check_impossible_values() -> se reviso que Process temperature no
+   sea menor que Air temperature (raro fisicamente). 0 casos.
+
+5. tipos incorrectos
+   check_dtypes() -> todas las columnas numericas tienen su tipo
+   correcto (int64/float64), sin ninguna venir como texto por error.
+
+6. categorias inconsistentes
+   check_categorical_consistency() -> Type solo tiene L, M, H, sin
+   categorias nuevas o mal escritas.
+
+7. fechas invalidas
+   no aplica: AI4I es un dataset transversal, no tiene columna de
+   fecha ni timestamp (a diferencia de los grupos 7 y 8 que trabajan
+   series de tiempo).
+
+8. datos imposibles
+   check_impossible_values() -> se revisaron rangos fisicos (rpm,
+   torque y desgaste no pueden ser negativos, temperatura no puede
+   ser <= 0 Kelvin). 0 casos encontrados.
+
+9. valores extremos
+   check_outliers() (IQR + Z-score) -> Rotational speed tiene 418
+   outliers por IQR, el resto de variables prácticamente ninguno.
+   decision: no se eliminan, porque en deteccion de anomalias un
+   outlier puede ser justo la falla que el modelo debe aprender a
+   detectar, no ruido a descartar.
+
+10. cardinalidad
+    check_categorical_consistency() -> Type con cardinalidad 3,
+    Product ID con cardinalidad ~10000 (practicamente unico).
+
+11. skewness
+    check_skewness() -> Rotational speed sale muy sesgada (1.99),
+    el resto de variables salen simetricas.
+    decision: se documenta para que quien entrene el modelo lo
+    considere (Isolation Forest no asume normalidad, asi que no es
+    obligatorio transformarla).
+
+12. errores de unidad
+    check_unit_consistency() -> se verifico que las temperaturas
+    esten en rango razonable para Kelvin (no Celsius por error) y
+    que rpm este en rango razonable (no rad/s por error). Sin
+    mezclas de unidades detectadas.
+
+13. leakage
+    check_leakage() -> TWF, HDF, PWF, OSF correlacionan fuerte con
+    el target (0.36 a 0.58), RNF casi nada (0.005, porque es una
+    falla aleatoria por diseño del dataset).
+    decision: las 5 columnas se excluyen del feature set del modelo,
+    porque son sub-codigos del mismo evento de falla, no porque
+    todas correlacionen igual.
+
+14. imbalance
+    check_imbalance() -> 9661 normales vs 339 fallas (3.39%), ratio
+    28.5 a 1.
+    decision: no se usa accuracy como metrica principal, se usan
+    PR-AUC, Recall y F1 (esto se lo pasamos al equipo de modelado).
+
+15. gaps temporales
+    no aplica, mismo motivo que el punto 7.
+
+16. correlacion excesiva
+    check_excessive_correlation() -> ningun par de variables
+    numericas supera 0.9 de correlacion entre si.
+    decision: no se descarta ninguna variable por redundancia.
+
+(anomalias estadisticas queda cubierto dentro de check_outliers,
+con el metodo de Z-score > 3)
+
+Por que se guarda todo en reports/data_quality/quality_report.json:
+para tener un archivo persistente que se pueda citar en el informe
+tecnico y mostrar en la demo, en vez de depender de lo que se
+imprimio una vez en la terminal y ya no queda registrado. Sirve
+tambien como evidencia de que el diagnostico se corrio con datos
+reales, no solo como una afirmacion sin respaldo.
+""" 
