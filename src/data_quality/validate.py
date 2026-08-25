@@ -127,7 +127,31 @@ def check_categorical_consistency(df: pd.DataFrame) -> dict:
 # AI4I no tiene columnas de fecha, es un dataset transversal
 # (no serie de tiempo), por eso no se revisan fechas ni gaps temporales
 
+def check_impossible_values(df: pd.DataFrame) -> dict:
+    # aca revisamos cosas que fisicamente no tienen sentido,
+    # sin importar lo que diga la distribucion estadistica
+    problemas = {}
 
+    if (df["Air temperature [K]"] <= 0).any():
+        problemas["air_temperature_no_positiva"] = int((df["Air temperature [K]"] <= 0).sum())
+
+    if (df["Rotational speed [rpm]"] <= 0).any():
+        problemas["rotational_speed_no_positiva"] = int((df["Rotational speed [rpm]"] <= 0).sum())
+
+    if (df["Torque [Nm]"] < 0).any():
+        problemas["torque_negativo"] = int((df["Torque [Nm]"] < 0).sum())
+
+    if (df["Tool wear [min]"] < 0).any():
+        problemas["tool_wear_negativo"] = int((df["Tool wear [min]"] < 0).sum())
+
+    # la temperatura de proceso normalmente deberia ser mayor o
+    # igual a la del ambiente, si es menor es raro y vale la pena
+    # revisarlo (no necesariamente esta mal, pero se marca)
+    proceso_menor_que_ambiente = df["Process temperature [K]"] < df["Air temperature [K]"]
+    if proceso_menor_que_ambiente.any():
+        problemas["process_temp_menor_que_air_temp"] = int(proceso_menor_que_ambiente.sum())
+
+    return problemas
 
 
 
@@ -188,5 +212,7 @@ if __name__ == "__main__":
     print(check_dtypes(df))
     print("--- categorias ---")
     print(check_categorical_consistency(df))
+    print("--- valores imposibles ---")
+    print(check_impossible_values(df))
 
     
