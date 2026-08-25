@@ -214,7 +214,62 @@ def check_leakage(df: pd.DataFrame) -> dict:
         "correlacion_con_target": correlaciones,
     }
 
+def check_unit_consistency(df: pd.DataFrame) -> dict:
+    # verificamos que los valores esten en rangos esperados para
+    # la unidad que dice el nombre de columna. si alguien cargo
+    # temperatura en celsius en vez de kelvin por error, por ejemplo,
+    # los valores se saldrian completamente de este rango
+    problemas = {}
 
+    # kelvin: temperatura ambiente/proceso industrial razonable
+    # (si viniera en celsius por error, saldria fuera de este rango)
+    for col in ["Air temperature [K]", "Process temperature [K]"]:
+        fuera_de_rango = df[(df[col] < 250) | (df[col] > 400)]
+        if len(fuera_de_rango) > 0:
+            problemas[col] = f"{len(fuera_de_rango)} valores fuera del rango esperado en Kelvin (250-400)"
+
+    # rpm: velocidad rotacional tipica de maquinaria industrial
+    # (si viniera en rad/s por error, los numeros serian mucho mas chicos)
+    fuera_rpm = df[(df["Rotational speed [rpm]"] < 100) | (df["Rotational speed [rpm]"] > 5000)]
+    if len(fuera_rpm) > 0:
+        problemas["Rotational speed [rpm]"] = f"{len(fuera_rpm)} valores fuera del rango esperado en rpm (100-5000)"
+
+    if not problemas:
+        return {"resultado": "no se detectaron mezclas de unidades, todos los valores estan en rango esperado"}
+
+    return problemas
+
+
+def check_imbalance(df: pd.DataFrame) -> dict:
+    # cuenta cuantos casos hay de cada clase en el target
+    # esto es clave porque justifica no usar accuracy como metrica
+    conteo = df[TARGET_COLUMN].value_counts().to_dict()
+    tasa_fallo = df[TARGET_COLUMN].mean()
+
+    return {
+        "conteo_por_clase": {str(k): int(v) for k, v in conteo.items()},
+        "tasa_fallo": round(float(tasa_fallo), 4),
+        "ratio_normal_vs_fallo": round(conteo.get(0, 0) / max(conteo.get(1, 1), 1), 2),
+    }
+
+
+def check_excessive_correlation(df: pd.DataFrame, umbral: float = 0.9) -> dict:
+    # buscamos pares de variables numericas muy correlacionadas
+    # entre si (no con el target, sino entre ellas). si dos
+    # variables casi se repiten la informacion, es redundancia
+    matriz_corr = df[NUMERIC_COLUMNS].corr().abs()
+    pares_altos = []
+
+    for i, col_i in enumerate(NUMERIC_COLUMNS):
+        for col_j in NUMERIC_COLUMNS[i + 1:]:
+            valor = matriz_corr.loc[col_i, col_j]
+            if valor >= umbral:
+                pares_altos.append((col_i, col_j, round(float(valor), 3)))
+
+    return {
+        "pares_alta_correlacion": pares_altos,
+        "umbral_usado": umbral,
+    } 
 
 
 
@@ -281,5 +336,14 @@ if __name__ == "__main__":
 
     print("--- leakage ---")
     print(check_leakage(df))
+
+    print("--- imbalance ---")
+    print(check_imbalance(df))
+
+    print("--- correlacion excesiva ---")
+    print(check_excessive_correlation(df))
+
+    print("--- consistencia de unidades ---")
+    print(check_unit_consistency(df))
 
     
