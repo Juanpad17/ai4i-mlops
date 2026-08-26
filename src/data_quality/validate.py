@@ -301,9 +301,6 @@ def save_report(reporte: dict) -> None:
     print(f"reporte guardado en {REPORT_PATH}")
 
 
-
-
-
 if __name__ == "__main__":
     df = load_raw_data()
 
@@ -313,22 +310,41 @@ if __name__ == "__main__":
     print("\n=== RESUMEN DATA QUALITY - AI4I (16 puntos) ===")
     print(f"filas: {reporte['filas']} | columnas: {reporte['columnas']}")
 
-    print(f"1. valores faltantes: {reporte['missing_values']['total_celdas_nulas']} nulos totales")
-    print(f"2. faltantes codificados con simbolos: {reporte['missing_values']['posibles_valores_centinela']}")
-    print(f"3. duplicados: {reporte['duplicados']['duplicados_exactos']} exactos")
-    print(f"4. registros inconsistentes: {reporte['valores_imposibles']}")
-    print(f"5. tipos incorrectos: {reporte['tipos']['columnas_no_numericas_inesperadas']}")
-    print(f"6. categorias inconsistentes: {reporte['categorias']['Type']['categorias_no_esperadas']}")
+    nulos = reporte['missing_values']['total_celdas_nulas']
+    print(f"1. valores faltantes: {'sin problemas, 0 nulos' if nulos == 0 else f'{nulos} nulos encontrados'}")
+
+    centinela = reporte['missing_values']['posibles_valores_centinela']
+    print(f"2. faltantes codificados con simbolos: {'sin problemas, ninguno encontrado' if not centinela else centinela}")
+
+    dup = reporte['duplicados']['duplicados_exactos']
+    print(f"3. duplicados: {'sin problemas, 0 duplicados' if dup == 0 else f'{dup} duplicados encontrados'}")
+
+    inconsistentes = reporte['valores_imposibles']
+    print(f"4. registros inconsistentes: {'sin problemas, ninguno encontrado' if not inconsistentes else inconsistentes}")
+
+    tipos_malos = reporte['tipos']['columnas_no_numericas_inesperadas']
+    print(f"5. tipos incorrectos: {'sin problemas, todos los tipos son correctos' if not tipos_malos else tipos_malos}")
+
+    cat_raras = reporte['categorias']['Type']['categorias_no_esperadas']
+    print(f"6. categorias inconsistentes: {'sin problemas, solo estan L, M, H' if not cat_raras else cat_raras}")
+
     print(f"7. fechas invalidas: {reporte['fechas_invalidas']}")
-    print(f"8. datos imposibles: {reporte['valores_imposibles']}")
-    print(f"9. valores extremos (Rotational speed, IQR): {reporte['outliers']['Rotational speed [rpm]']['cantidad_outliers_iqr']}")
-    print(f"10. cardinalidad de Type: {reporte['categorias']['Type']['cardinalidad']}")
-    print(f"11. skewness mas alta (Rotational speed): {reporte['skewness']['Rotational speed [rpm]']['skewness']}")
-    print(f"12. consistencia de unidades: {reporte['consistencia_unidades']}")
+
+    imposibles = reporte['valores_imposibles']
+    print(f"8. datos imposibles: {'sin problemas, ninguno encontrado' if not imposibles else imposibles}")
+
+    print(f"9. valores extremos (Rotational speed, IQR): {reporte['outliers']['Rotational speed [rpm]']['cantidad_outliers_iqr']} encontrados")
+    print(f"10. cardinalidad de Type: {reporte['categorias']['Type']['cardinalidad']} categorias (L, M, H)")
+    print(f"11. skewness mas alta: Rotational speed = {reporte['skewness']['Rotational speed [rpm]']['skewness']} (sesgada)")
+    print(f"12. consistencia de unidades: {reporte['consistencia_unidades']['resultado']}")
     print(f"13. leakage: {reporte['leakage']['correlacion_con_target']}")
-    print(f"14. imbalance (tasa de fallo): {reporte['imbalance']['tasa_fallo']:.2%}")
+    print(f"14. tasa de fallo (imbalance): {reporte['imbalance']['tasa_fallo']:.2%}")
     print(f"15. gaps temporales: {reporte['gaps_temporales']}")
-    print(f"16. correlacion excesiva: {reporte['correlacion_excesiva']['pares_alta_correlacion']}")
+
+    corr_alta = reporte['correlacion_excesiva']['pares_alta_correlacion']
+    print(f"16. correlacion excesiva: {'sin problemas, ninguna variable redundante' if not corr_alta else corr_alta}")
+
+
 
 
     """
