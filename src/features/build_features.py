@@ -77,6 +77,14 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     # -------------------------------------------------------------------------
+    # FEATURE 3: ESTRÉS POR DESGASTE (wear_strain)
+    #
+    # Justificación Física: Una herramienta muy desgastada (high Tool Wear) sometida    
+    data["wear_strain"] = (
+        data["mechanical_power"] * data["Tool wear [min]"]
+    )
+
+    # -------------------------------------------------------------------------
     # RECOMENDACIÓN DE MEJORA FUTURA (FEATURE OBLIGATORIA PARA MANTENIMIENTO)
     # 
     # Feature sugerida: "wear_strain" = mechanical_power * Tool wear [min]
@@ -85,6 +93,80 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     # -------------------------------------------------------------------------
 
     return data
+
+# =============================================================================
+# FUNCIONES AUXILIARES REQUERIDAS POR PIPELINES DE ENTRENAMIENTO Y EXPERIMENTOS
+# =============================================================================
+
+def normalize_column_names(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Normaliza los nombres de las columnas para eliminar espacios y caracteres 
+    especiales que causan conflictos en pipelines automatizados.
+    """
+    df_copy = df.copy()
+    df_copy.columns = (
+        df_copy.columns.str.strip()
+        .str.lower()
+        .str.replace(" ", "_", regex=False)
+        .str.replace("[", "", regex=False)
+        .str.replace("]", "", regex=False)
+        .str.replace("(", "", regex=False)
+        .str.replace(")", "", regex=False)
+    )
+    return df_copy
+
+
+def split_features_target(df: pd.DataFrame):
+    """
+    Separa el conjunto de datos en las variables predictoras (X) y la variable 
+    objetivo (y). Mapea nombres crudos y normalizados del dataset AI4I 2020.
+    """
+    # Intentar detectar nombres comunes de la columna objetivo de fallas mecánicas
+    target_candidates = ["machine_failure", "Machine failure", "fail", "target"]
+    target_col = None
+    
+    for col in target_candidates:
+        if col in df.columns:
+            target_col = col
+            break
+            
+    if not target_col:
+        raise KeyError("No se encontró la columna objetivo (Machine failure) en el DataFrame.")
+        
+    X = df.drop(columns=[target_col])
+    y = df[target_col]
+    return X, y
+
+
+def build_preprocessor():
+    """
+    Construye un objeto ColumnTransformer de scikit-learn compatible con Pipeline.
+    Escala las variables numéricas generadas y codifica la columna categórica 'Type'.
+    """
+    from sklearn.compose import ColumnTransformer
+    from sklearn.preprocessing import StandardScaler, OneHotEncoder
+    
+    # Columnas que entrega la función build_features original
+    numeric_features = [
+        "Air temperature [K]", 
+        "Process temperature [K]", 
+        "Rotational speed [rpm]", 
+        "Torque [Nm]", 
+        "Tool wear [min]",
+        "temperature_difference",
+        "mechanical_power",
+        "wear_strain"
+    ]
+    categorical_features = ["Type"]
+    
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ("num", StandardScaler(), numeric_features),
+            ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features)
+        ],
+        remainder="passthrough"
+    )
+    return preprocessor
 
 
 

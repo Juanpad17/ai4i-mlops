@@ -3,6 +3,14 @@
 # Proyecto: AI4I Predictive Maintenance - MLOps
 # ============================================================
 
+import sys
+from pathlib import Path
+
+# Detecta automáticamente la raíz del proyecto y la inyecta en Python
+ROOT_PATH = Path(__file__).resolve().parent.parent.parent
+if str(ROOT_PATH) not in sys.path:
+    sys.path.insert(0, str(ROOT_PATH))
+
 # Path permite manejar rutas del proyecto de forma portable.
 from pathlib import Path
 
@@ -54,7 +62,7 @@ from sklearn.metrics import (
 # durante entrenamiento y posteriormente en producción.
 from src.features.build_features import (
     build_preprocessor,
-    normalize_column_names,
+    build_features,
     split_features_target,
 )
 
@@ -122,12 +130,6 @@ def load_data() -> pd.DataFrame:
 
     # Cargamos el CSV.
     dataframe = pd.read_csv(DATA_PATH)
-
-    # Aplicamos la misma normalización centralizada
-    # definida en Feature Engineering.
-    dataframe = normalize_column_names(
-        dataframe
-    )
 
     return dataframe
 
@@ -288,7 +290,7 @@ def main() -> None:
     X, y = split_features_target(
         dataframe
     )
-
+    X = build_features(X)
     print(f"Registros disponibles: {len(X)}")
 
 

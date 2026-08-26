@@ -1,9 +1,15 @@
+import sys
+from pathlib import Path
+
+# Detecta automáticamente la raíz del proyecto y la inyecta en Python
+ROOT_PATH = Path(__file__).resolve().parent.parent.parent
+if str(ROOT_PATH) not in sys.path:
+    sys.path.insert(0, str(ROOT_PATH))
+
 # ============================================================
 # EVALUACIÓN FINAL Y REGISTRO DEL MODELO SELECCIONADO
 # Proyecto: AI4I Predictive Maintenance - MLOps
 # ============================================================
-
-from pathlib import Path
 import json
 
 import pandas as pd
@@ -33,8 +39,8 @@ from sklearn.metrics import (
 # y posterior producción.
 from src.features.build_features import (
     build_preprocessor,
-    normalize_column_names,
     split_features_target,
+    build_features,
 )
 
 
@@ -88,10 +94,6 @@ def load_data() -> pd.DataFrame:
         )
 
     dataframe = pd.read_csv(DATA_PATH)
-
-    dataframe = normalize_column_names(
-        dataframe
-    )
 
     return dataframe
 
@@ -259,6 +261,10 @@ def main() -> None:
     X, y = split_features_target(
         dataframe
     )
+
+    # Aplicamos exactamente el mismo Feature Engineering
+    # que se utilizó durante experimentación.
+    X = build_features(X)
 
 
     # --------------------------------------------------------

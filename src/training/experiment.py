@@ -3,6 +3,15 @@
 # Proyecto: AI4I Predictive Maintenance - MLOps
 # ============================================================
 
+# Importamos librerías estándar de Python.
+import sys
+from pathlib import Path
+
+# Detecta automáticamente la raíz del proyecto y la inyecta en Python
+ROOT_PATH = Path(__file__).resolve().parent.parent.parent
+if str(ROOT_PATH) not in sys.path:
+    sys.path.insert(0, str(ROOT_PATH))
+
 # Path permite construir rutas relativas al proyecto.
 from pathlib import Path
 
@@ -50,9 +59,10 @@ from sklearn.metrics import (
 # Esto evita duplicar lógica entre entrenamiento,
 # experimentación y posteriormente producción.
 from src.features.build_features import (
-    build_preprocessor,
+    build_features,
     normalize_column_names,
     split_features_target,
+    build_preprocessor,
 )
 
 
@@ -104,7 +114,7 @@ DATA_VERSION = "ai4i_uci_601_v1"
 
 def load_data() -> pd.DataFrame:
     """
-    Carga y normaliza el dataset AI4I.
+    Carga el dataset AI4I.
 
     Returns
     -------
@@ -123,11 +133,6 @@ def load_data() -> pd.DataFrame:
     # Cargamos los datos.
     dataframe = pd.read_csv(
         DATA_PATH
-    )
-
-    # Aplicamos la normalización centralizada de nombres.
-    dataframe = normalize_column_names(
-        dataframe
     )
 
     return dataframe
@@ -517,6 +522,8 @@ def main() -> None:
         dataframe
     )
 
+    # Calculamos las features adicionales definidas en Feature Engineering.    
+    X = build_features(X)
 
     # --------------------------------------------------------
     # 2. TRAIN / VALIDATION / TEST
@@ -856,6 +863,153 @@ def main() -> None:
         "para seleccionar el modelo."
     )
 
+    # ============================================================
+    # 10. MODEL REGISTRY (ciclo: Experiment -> Candidate -> Validation -> Production)
+    # ============================================================
+    #
+    # Agregar este bloque al final de main(), después de imprimir
+    # "EXPERIMENTACIÓN FINALIZADA". Requiere: from mlflow import MlflowClient
+    # (o mlflow.tracking.MlflowClient según tu versión de MLflow).
+
+    from mlflow import MlflowClient
+
+    REGISTERED_MODEL_NAME = "ai4i_anomaly_detector"
+
+    client = MlflowClient()
+
+    # --------------------------------------------------------
+    # 10.1 IDENTIFICAR LA RUN DEL MEJOR CANDIDATO
+    # --------------------------------------------------------
+    # best_model es la fila (Series) del results_dataframe con el
+    # run_name ganador. Necesitamos su run_id real de MLflow para
+    # poder registrar el modelo logueado en esa run.
+
+    runs = mlflow.search_runs(
+        experiment_names=["AI4I_Anomaly_Detection_Comparison"],
+        filter_string=f"tags.mlflow.runName = '{best_model['run_name']}'",
+    )
+
+    best_run_id = runs.iloc[0]["run_id"]
+
+    print("\n==========================================")
+    print("MODEL REGISTRY")
+    print("==========================================")
+
+    print(f"Registrando run: {best_run_id} ({best_model['run_name']})")
+
+
+    # --------------------------------------------------------
+    # 10.2 CANDIDATE: registrar el modelo del mejor run
+    # --------------------------------------------------------
+    # Esto crea (o versiona, si ya existe) el modelo registrado.
+    # Nace como "candidato" -- todavía no está en ninguna etapa oficial.
+
+    model_uri = f"runs:/{best_run_id}/model"
+
+    registered_model = mlflow.register_model(
+        model_uri=model_uri,
+        name=REGISTERED_MODEL_NAME,
+    )
+
+    model_version = registered_model.version
+
+    print(f"Modelo registrado como '{REGISTERED_MODEL_NAME}' versión {model_version}")
+
+    # Dejamos explícito el criterio de selección como tag de la versión.
+    client.set_model_version_tag(
+        name=REGISTERED_MODEL_NAME,
+        version=model_version,
+        key="selection_criteria",
+        value="pr_auc (mejor sobre validation)",
+    )
+
+    client.set_model_version_tag(
+        name=REGISTERED_MODEL_NAME,
+        version=model_version,
+        key="pr_auc",
+        value=f"{best_model['pr_auc']:.4f}",
+    )
+
+    client.set_model_version_tag(
+        name=REGISTERED_MODEL_NAME,
+        version=model_version,
+        key="stage_custom",
+        value="Candidate",
+    )
+
+
+    # --------------------------------------------------------
+    # 10.3 VALIDATION: evaluar sobre el conjunto TEST (nunca usado antes)
+    # --------------------------------------------------------
+    # Este es el paso que tu script deja preparado pero no ejecuta:
+    # usar X_test/y_test -- separados desde el inicio y jamás tocados --
+    # como confirmación final e independiente del desempeño del candidato.
+
+    loaded_model = mlflow.sklearn.load_model(model_uri)
+
+    test_metrics = evaluate_model(loaded_model, X_test, y_test)
+
+    print("\nMétricas finales sobre TEST (nunca usado para seleccionar el modelo):")
+    for metric_name, metric_value in test_metrics.items():
+        print(f"{metric_name}: {metric_value:.4f}")
+
+    client.set_model_version_tag(
+        name=REGISTERED_MODEL_NAME,
+        version=model_version,
+        key="test_pr_auc",
+        value=f"{test_metrics['pr_auc']:.4f}",
+    )
+
+    client.set_model_version_tag(
+        name=REGISTERED_MODEL_NAME,
+        version=model_version,
+        key="stage_custom",
+        value="Validation",
+    )
+
+
+    # --------------------------------------------------------
+    # 10.4 PRODUCTION: criterio explícito de promoción
+    # --------------------------------------------------------
+    # Solo promovemos a Production si el desempeño en TEST confirma
+    # lo visto en validation (criterio explícito, ej. PR-AUC >= umbral).
+
+    PRODUCTION_PR_AUC_THRESHOLD = 0.75  # ajustar según tu caso
+
+    if test_metrics["pr_auc"] >= PRODUCTION_PR_AUC_THRESHOLD:
+
+        # Nota: transition_model_version_stage está deprecado en MLflow
+        # recientes a favor de alias. Usá el que corresponda a tu versión:
+
+        # --- Opción A (MLflow >= 2.9, API de alias, recomendada) ---
+        client.set_registered_model_alias(
+            name=REGISTERED_MODEL_NAME,
+            alias="production",
+            version=model_version,
+        )
+
+        # --- Opción B (API de stages clásica, si tu versión aún la soporta) ---
+        # client.transition_model_version_stage(
+        #     name=REGISTERED_MODEL_NAME,
+        #     version=model_version,
+        #     stage="Production",
+        # )
+
+        client.set_model_version_tag(
+            name=REGISTERED_MODEL_NAME,
+            version=model_version,
+            key="stage_custom",
+            value="Production",
+        )
+
+        print(f"\nModelo promovido a PRODUCTION (test_pr_auc={test_metrics['pr_auc']:.4f} >= {PRODUCTION_PR_AUC_THRESHOLD})")
+
+    else:
+        print(
+            f"\nModelo NO promovido a producción "
+            f"(test_pr_auc={test_metrics['pr_auc']:.4f} < {PRODUCTION_PR_AUC_THRESHOLD})"
+        )
+
 
 # ============================================================
 # PUNTO DE ENTRADA
@@ -863,3 +1017,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
