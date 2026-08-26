@@ -5,7 +5,7 @@
 import pandas as pd
 from quality_gates import run_quality_gates
 
-df = pd.read_csv("src/ingestion/data/raw/ai4i2020.csv")
+df = pd.read_csv("data/raw/ai4i2020.csv")
 
 print(">>> PRUEBA 1: dataset original (deberia pasar todo)")
 reporte_ok = run_quality_gates(df.copy(), nombre_batch="prueba_original")

@@ -16,7 +16,7 @@ from pathlib import Path
 import pandas as pd
 
 # mismo csv que usa validate.py
-RAW_PATH = Path("src/ingestion/data/raw/ai4i2020.csv")
+RAW_PATH = Path("data/raw/ai4i2020.csv")
 LOG_PATH = Path("reports/data_quality/gate_log.jsonl")
 
 EXPECTED_COLUMNS = {

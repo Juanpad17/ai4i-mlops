@@ -15,7 +15,7 @@ from scipy import stats
 # nombres de columnas en cada funcion
 
 # el csv lo genera el ingest.ipynb, queda guardado dentro de src/ingestion
-RAW_PATH = Path("src/ingestion/data/raw/ai4i2020.csv")
+RAW_PATH = Path("data/raw/ai4i2020.csv")
 REPORT_PATH = Path("reports/data_quality/quality_report.json")
 
 ID_COLUMNS = ["UDI", "Product ID"]
