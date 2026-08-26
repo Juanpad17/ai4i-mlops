@@ -1,0 +1,145 @@
+{
+  "filas": 10000,
+  "columnas": 14,
+  "missing_values": {
+    "nulos_por_columna": {},
+    "posibles_valores_centinela": {},
+    "total_celdas_nulas": 0
+  },
+  "duplicados": {
+    "duplicados_exactos": 0,
+    "tasa_duplicados": 0.0,
+    "product_id_repetidos": 0
+  },
+  "valores_imposibles": {},
+  "tipos": {
+    "tipos_actuales": {
+      "UDI": "int64",
+      "Product ID": "str",
+      "Type": "str",
+      "Air temperature [K]": "float64",
+      "Process temperature [K]": "float64",
+      "Rotational speed [rpm]": "int64",
+      "Torque [Nm]": "float64",
+      "Tool wear [min]": "int64",
+      "Machine failure": "int64",
+      "TWF": "int64",
+      "HDF": "int64",
+      "PWF": "int64",
+      "OSF": "int64",
+      "RNF": "int64"
+    },
+    "columnas_no_numericas_inesperadas": {}
+  },
+  "categorias": {
+    "Type": {
+      "valores_unicos": [
+        "L",
+        "M",
+        "H"
+      ],
+      "cardinalidad": 3,
+      "conteo": {
+        "L": 6000,
+        "M": 2997,
+        "H": 1003
+      },
+      "categorias_no_esperadas": []
+    },
+    "Product ID": {
+      "cardinalidad": 10000,
+      "filas_totales": 10000,
+      "es_practicamente_unico": true
+    }
+  },
+  "fechas_invalidas": "no aplica: AI4I no tiene columna de fecha, es un dataset transversal",
+  "outliers": {
+    "Air temperature [K]": {
+      "rango_iqr": [
+        293.5,
+        306.3
+      ],
+      "cantidad_outliers_iqr": 0,
+      "cantidad_outliers_zscore": 0
+    },
+    "Process temperature [K]": {
+      "rango_iqr": [
+        305.35,
+        314.55
+      ],
+      "cantidad_outliers_iqr": 0,
+      "cantidad_outliers_zscore": 0
+    },
+    "Rotational speed [rpm]": {
+      "rango_iqr": [
+        1139.5,
+        1895.5
+      ],
+      "cantidad_outliers_iqr": 418,
+      "cantidad_outliers_zscore": 164
+    },
+    "Torque [Nm]": {
+      "rango_iqr": [
+        12.8,
+        67.2
+      ],
+      "cantidad_outliers_iqr": 69,
+      "cantidad_outliers_zscore": 25
+    },
+    "Tool wear [min]": {
+      "rango_iqr": [
+        -110.5,
+        325.5
+      ],
+      "cantidad_outliers_iqr": 0,
+      "cantidad_outliers_zscore": 0
+    }
+  },
+  "skewness": {
+    "Air temperature [K]": {
+      "skewness": 0.114,
+      "interpretacion": "simetrica"
+    },
+    "Process temperature [K]": {
+      "skewness": 0.015,
+      "interpretacion": "simetrica"
+    },
+    "Rotational speed [rpm]": {
+      "skewness": 1.993,
+      "interpretacion": "muy sesgada"
+    },
+    "Torque [Nm]": {
+      "skewness": -0.01,
+      "interpretacion": "simetrica"
+    },
+    "Tool wear [min]": {
+      "skewness": 0.027,
+      "interpretacion": "simetrica"
+    }
+  },
+  "consistencia_unidades": {
+    "resultado": "no se detectaron mezclas de unidades, todos los valores estan en rango esperado"
+  },
+  "leakage": {
+    "correlacion_con_target": {
+      "TWF": 0.363,
+      "HDF": 0.576,
+      "PWF": 0.523,
+      "OSF": 0.531,
+      "RNF": 0.005
+    }
+  },
+  "imbalance": {
+    "conteo_por_clase": {
+      "0": 9661,
+      "1": 339
+    },
+    "tasa_fallo": 0.0339,
+    "ratio_normal_vs_fallo": 28.5
+  },
+  "gaps_temporales": "no aplica: mismo motivo que fechas_invalidas, no hay columna temporal",
+  "correlacion_excesiva": {
+    "pares_alta_correlacion": [],
+    "umbral_usado": 0.9
+  }
+}
