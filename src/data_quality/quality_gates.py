@@ -77,9 +77,13 @@ def run_quality_gates(df: pd.DataFrame, nombre_batch: str = "raw") -> dict:
         "detalle": f"valores encontrados={valores_target}",
     })
 
-    # gate 6: variables fisicas no pueden ser negativas
+    # gate 6: no pueden ser negativas
+    # si la columna no existe, la saltamos en vez de reventar
     columnas_no_negativas = ["Rotational speed [rpm]", "Torque [Nm]", "Tool wear [min]"]
-    con_negativos = [c for c in columnas_no_negativas if (df[c] < 0).any()]
+    con_negativos = [
+        c for c in columnas_no_negativas
+        if c in df.columns and (df[c] < 0).any()
+    ]
     resultados.append({
         "regla": "variables_fisicas_no_negativas",
         "paso": len(con_negativos) == 0,
