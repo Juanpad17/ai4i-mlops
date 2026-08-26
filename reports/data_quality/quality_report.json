@@ -15,8 +15,8 @@
   "tipos": {
     "tipos_actuales": {
       "UDI": "int64",
-      "Product ID": "object",
-      "Type": "object",
+      "Product ID": "str",
+      "Type": "str",
       "Air temperature [K]": "float64",
       "Process temperature [K]": "float64",
       "Rotational speed [rpm]": "int64",
