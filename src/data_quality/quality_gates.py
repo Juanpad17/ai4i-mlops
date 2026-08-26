@@ -7,7 +7,6 @@ modulo SI detiene el pipeline si el dataset no cumple condiciones
 minimas. Se corre antes de entrenar, y tambien se puede usar para
 validar un batch de produccion simulado (Seccion Q, mas adelante).
 
-El enunciado pide minimo 5 reglas automaticas, aca hay 6.
 """
 
 import json
@@ -29,7 +28,7 @@ EXPECTED_COLUMNS = {
 VALID_TYPES = {"L", "M", "H"}
 TARGET_COLUMN = "Machine failure"
 
-MIN_ROWS = 1000
+MIN_ROWS = 1000 #minimo de filas
 MAX_DUPLICATE_RATE = 0.01
 MAX_MISSING_RATE = 0.05
 AIR_TEMP_RANGE = (250, 400)
@@ -46,10 +45,10 @@ def run_quality_gates(df: pd.DataFrame, nombre_batch: str = "raw") -> dict:
         "detalle": f"filas={len(df)}, minimo={MIN_ROWS}",
     })
 
-    # gate 2: esquema completo
+    # gate 2: estructura del archivo completa
     columnas_faltantes = EXPECTED_COLUMNS - set(df.columns)
     resultados.append({
-        "regla": "esquema_completo",
+        "regla": "estructura_completa",
         "paso": len(columnas_faltantes) == 0,
         "detalle": f"faltantes={columnas_faltantes}" if columnas_faltantes else "ok",
     })
@@ -71,8 +70,6 @@ def run_quality_gates(df: pd.DataFrame, nombre_batch: str = "raw") -> dict:
     })
 
     # gate 5: target con valores validos (solo 0 o 1)
-    # convertimos a int de python normal, si no numpy los muestra
-    # como np.int64(0) en vez de solo 0
     valores_target = set(int(v) for v in df[TARGET_COLUMN].dropna().unique())
     resultados.append({
         "regla": "target_valores_validos",
