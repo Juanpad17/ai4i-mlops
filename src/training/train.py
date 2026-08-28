@@ -75,7 +75,7 @@ from src.features.build_features import (
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 # Dataset generado por nuestra etapa de ingesta.
-DATA_PATH = PROJECT_ROOT / "data" / "raw" / "ai4i2020.csv"
+DATA_PATH = Path("data/processed/validated.csv")
 
 # Carpeta donde guardaremos artefactos temporales.
 ARTIFACTS_DIR = PROJECT_ROOT / "artifacts"

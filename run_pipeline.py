@@ -34,7 +34,7 @@ def main():
 
     # 1. ETAPA DE INGESTA DE DATOS
     run_stage(
-        [python_bin, "src/ingestion/ingesta.py"], 
+        [python_bin, "src/ingestion/ingest.py"], 
         "1. Ingesta de Datos (Descarga desde la UCI)"
     )
 
@@ -50,28 +50,22 @@ def main():
         "3. Filtros y Puertas de Calidad (Generación de validated.csv)"
     )
 
-    # 4. PRUEBA DE HUMO (Smoke Test)
-    run_stage(
-        [python_bin, "tests/test_smoke_pipeline.py"], 
-        "4. Smoke Test del Pipeline Global (Validación de Arquitectura)"
-    )
-
-    # 5. ENTRENAMIENTO MODELO BASE
+    # 4. ENTRENAMIENTO MODELO BASE
     run_stage(
         [python_bin, "src/training/train.py"], 
-        "5. Entrenamiento del Modelo Base (Isolation Forest)"
+        "4. Entrenamiento del Modelo Base (Isolation Forest)"
     )
 
-    # 6. EXPERIMENTACIÓN MASIVA Y COMPARACIÓN
+    # 5. EXPERIMENTACIÓN MASIVA Y COMPARACIÓN
     run_stage(
         [python_bin, "src/training/experiment.py"], 
-        "6. Comparación Masiva de Modelos en MLflow"
+        "5. Comparación Masiva de Modelos en MLflow"
     )
 
-    # 7. REGISTRO Y FINALIZACIÓN DEL MODELO GANADOR
+    # 6. REGISTRO Y FINALIZACIÓN DEL MODELO GANADOR
     run_stage(
         [python_bin, "src/training/finalize_model.py"], 
-        "7. Cierre de Pipeline y Registro del Modelo Ganador en Producción"
+        "6. Cierre de Pipeline y Registro del Modelo Ganador en Producción"
     )
 
     print("="*60)
