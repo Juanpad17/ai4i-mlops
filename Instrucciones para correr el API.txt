@@ -1,0 +1,11 @@
+python -m uvicorn src.api.app:app --reload --port 8000
+
+GET  http://127.0.0.1:8000/health
+POST http://127.0.0.1:8000/predict
+
+Para usar otro modelo cambio:
+$env:MODEL_URI="models:/AI4I_LOF_Anomaly_Detector/6" el numero
+python -m uvicorn src.api.app:app --port 8000
+
+asi se carga el api:
+python -m uvicorn src.api.app:app --reload --port 8000

@@ -5,6 +5,7 @@ import pandas as pd
 # -----------------------------------------------------------------------------
 # VARIABLES DE ENTRADA SELECCIONADAS (DATASET REAL AI4I 2020)
 # -----------------------------------------------------------------------------
+# seis variables crudas y tres variables derivadas, totalizando nueve columnas de entrada al preprocesador
 FEATURE_COLUMNS = [
     "Type",                   # Categoría de calidad del producto (L: Low, M: Medium, H: High)
     "Air temperature [K]",    # Temperatura ambiente generada por el entorno de la fábrica
@@ -36,7 +37,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     # -------------------------------------------------------------------------
     # FEATURE 1: DIFERENCIA TÉRMICA (Delta T)
     # 
-    # Justificación Física: En ingeniería, el gradiente térmico es crítico. Una 
+    # Justificación Física: En ingeniería, la diferencia térmica es crítica. Una 
     # disipación de calor deficiente eleva rápidamente la temperatura del proceso 
     # respecto al aire. Si esta diferencia se dispara, indica fricción anómala o 
     # problemas en los sistemas de enfriamiento, un predictor clave de fallas HDF 
@@ -66,7 +67,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     #
     # Justificación Física: La potencia consumida (P = Torque x Velocidad Angular) 
     # mapea directamente el esfuerzo real del motor.
-    # En el dataset AI4I 2020, el torque y las RPM tienen una relación inversa perfecta. 
+    # En el dataset AI4I 2020, el torque y las RPM tienen una correlación inversa fuerte. 
     # Las anomalías ocurren cuando rompen esta regla: ej. si el torque es muy alto 
     # para una velocidad alta, la potencia se dispara indicando sobrecarga del motor,
     # lo cual predice fallas PWF (Power Failure) u OSF (Overstrain Failure).
@@ -89,7 +90,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     # 
     # Feature sugerida: "wear_strain" = mechanical_power * Tool wear [min]
     # Justificación: Una herramienta muy desgastada (high Tool Wear) sometida 
-    # a alta potencia (high mechanical_power) fallará inminentemente por fatiga (TWF).
+    # a alta potencia (high mechanical_power) puede asociarse con mayor riesgo de falla por fatiga (TWF).
     # -------------------------------------------------------------------------
 
     return data

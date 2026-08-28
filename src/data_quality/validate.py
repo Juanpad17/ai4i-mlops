@@ -9,6 +9,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import yaml
 from scipy import stats
 
 # rutas y columnas del dataset, todo centralizado aca para no repetir
@@ -17,6 +18,12 @@ from scipy import stats
 # el csv lo genera el ingest.ipynb, queda guardado dentro de src/ingestion
 RAW_PATH = Path("data/raw/ai4i2020.csv")
 REPORT_PATH = Path("reports/data_quality/quality_report.json")
+
+# Los umbrales (rangos, categorias validas, columnas no-negativas)
+# viven en params.yaml para que
+# quality_gates.py use estos valores como fuente unica de verdad y no haya riesgo de que
+# este archivo y quality_gates.py tengan numeros distintos para la misma validacion.
+PARAMS_PATH = Path("params.yaml")
 
 ID_COLUMNS = ["UDI", "Product ID"]
 CATEGORICAL_COLUMNS = ["Type"]
@@ -32,6 +39,19 @@ TARGET_COLUMN = "Machine failure"
 # TWF, HDF, PWF, OSF, RNF son subtipos de falla, si las usamos como
 # feature seria como decirle al modelo la respuesta antes de tiempo
 FAILURE_MODE_COLUMNS = ["TWF", "HDF", "PWF", "OSF", "RNF"]
+
+
+def load_params() -> dict:
+    # Carga params.yaml, la fuente unica de verdad para los
+    # umbrales de calidad
+    if not PARAMS_PATH.exists():
+        raise FileNotFoundError(
+            f"No se encontró {PARAMS_PATH}. Corre este script desde "
+            f"la raíz del proyecto, donde vive params.yaml."
+        )
+    with open(PARAMS_PATH, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
 
 def load_raw_data() -> pd.DataFrame:
     # carga el csv crudo, si no existe avisa que hay que correr
@@ -95,10 +115,13 @@ def check_dtypes(df: pd.DataFrame) -> dict:
         "columnas_no_numericas_inesperadas": mal_tipeadas,
     }   
 
-def check_categorical_consistency(df: pd.DataFrame) -> dict:
+def check_categorical_consistency(df: pd.DataFrame, params: dict) -> dict:
     # contamos cuantas veces aparece cada valor en Type
     # (deberian ser solo L, M o H segun el dataset)
     valores_type = df["Type"].value_counts().to_dict()
+
+    # Los valores validos ("L", "M", "H") vienen de params.yaml (quality.valid_machine_types)
+    tipos_validos = params["quality"]["valid_machine_types"]
 
     resultado = {
         "Type": {
@@ -109,7 +132,7 @@ def check_categorical_consistency(df: pd.DataFrame) -> dict:
             # si aparece algo que no sea L, M o H, lo marcamos aca
             # (podria ser un error de captura o una categoria nueva)
             "categorias_no_esperadas": [
-                v for v in valores_type if v not in ("L", "M", "H")
+                v for v in valores_type if v not in tipos_validos
             ],
         }
     }
@@ -127,7 +150,7 @@ def check_categorical_consistency(df: pd.DataFrame) -> dict:
 # AI4I no tiene columnas de fecha, es un dataset transversal
 # (no serie de tiempo), por eso no se revisan fechas ni gaps temporales
 
-def check_impossible_values(df: pd.DataFrame) -> dict:
+def check_impossible_values(df: pd.DataFrame, params: dict) -> dict:
     # aca revisamos cosas que fisicamente no tienen sentido,
     # sin importar lo que diga la distribucion estadistica
     problemas = {}
@@ -135,14 +158,14 @@ def check_impossible_values(df: pd.DataFrame) -> dict:
     if (df["Air temperature [K]"] <= 0).any():
         problemas["air_temperature_no_positiva"] = int((df["Air temperature [K]"] <= 0).sum())
 
-    if (df["Rotational speed [rpm]"] <= 0).any():
-        problemas["rotational_speed_no_positiva"] = int((df["Rotational speed [rpm]"] <= 0).sum())
-
-    if (df["Torque [Nm]"] < 0).any():
-        problemas["torque_negativo"] = int((df["Torque [Nm]"] < 0).sum())
-
-    if (df["Tool wear [min]"] < 0).any():
-        problemas["tool_wear_negativo"] = int((df["Tool wear [min]"] < 0).sum())
+    # Se recorre la lista quality.non_negative_features de params.yaml, asi que agregar
+    # una columna nueva a esa lista alcanza para validarla, sin
+    # tocar este archivo
+    for col in params["quality"]["non_negative_features"]:
+        negativos = df[col] < 0
+        if negativos.any():
+            clave = col.lower().replace(" ", "_").replace("[", "").replace("]", "") + "_negativo"
+            problemas[clave] = int(negativos.sum())
 
     # la temperatura de proceso normalmente deberia ser mayor o
     # igual a la del ambiente, si es menor es raro y vale la pena
@@ -214,25 +237,51 @@ def check_leakage(df: pd.DataFrame) -> dict:
         "correlacion_con_target": correlaciones,
     }
 
-def check_unit_consistency(df: pd.DataFrame) -> dict:
+def check_unit_consistency(df: pd.DataFrame, params: dict) -> dict:
     # verificamos que los valores esten en rangos esperados para
     # la unidad que dice el nombre de columna. si alguien cargo
     # temperatura en celsius en vez de kelvin por error, por ejemplo,
     # los valores se saldrian completamente de este rango
     problemas = {}
 
+    # Los rangos de temperatura (kelvin) y de rpm vienen de params.yaml.
+    rango_air = params["quality"]["air_temperature"]
+    rango_proceso = params["quality"]["process_temperature"]
+    rango_rpm = params["quality"]["rotational_speed"]
+
     # kelvin: temperatura ambiente/proceso industrial razonable
     # (si viniera en celsius por error, saldria fuera de este rango)
-    for col in ["Air temperature [K]", "Process temperature [K]"]:
-        fuera_de_rango = df[(df[col] < 250) | (df[col] > 400)]
-        if len(fuera_de_rango) > 0:
-            problemas[col] = f"{len(fuera_de_rango)} valores fuera del rango esperado en Kelvin (250-400)"
+    fuera_air = df[
+        (df["Air temperature [K]"] < rango_air["min"])
+        | (df["Air temperature [K]"] > rango_air["max"])
+    ]
+    if len(fuera_air) > 0:
+        problemas["Air temperature [K]"] = (
+            f"{len(fuera_air)} valores fuera del rango esperado en Kelvin "
+            f"({rango_air['min']}-{rango_air['max']})"
+        )
+
+    fuera_proceso = df[
+        (df["Process temperature [K]"] < rango_proceso["min"])
+        | (df["Process temperature [K]"] > rango_proceso["max"])
+    ]
+    if len(fuera_proceso) > 0:
+        problemas["Process temperature [K]"] = (
+            f"{len(fuera_proceso)} valores fuera del rango esperado en Kelvin "
+            f"({rango_proceso['min']}-{rango_proceso['max']})"
+        )
 
     # rpm: velocidad rotacional tipica de maquinaria industrial
     # (si viniera en rad/s por error, los numeros serian mucho mas chicos)
-    fuera_rpm = df[(df["Rotational speed [rpm]"] < 100) | (df["Rotational speed [rpm]"] > 5000)]
+    fuera_rpm = df[
+        (df["Rotational speed [rpm]"] < rango_rpm["min"])
+        | (df["Rotational speed [rpm]"] > rango_rpm["max"])
+    ]
     if len(fuera_rpm) > 0:
-        problemas["Rotational speed [rpm]"] = f"{len(fuera_rpm)} valores fuera del rango esperado en rpm (100-5000)"
+        problemas["Rotational speed [rpm]"] = (
+            f"{len(fuera_rpm)} valores fuera del rango esperado en rpm "
+            f"({rango_rpm['min']}-{rango_rpm['max']})"
+        )
 
     if not problemas:
         return {"resultado": "no se detectaron mezclas de unidades, todos los valores estan en rango esperado"}
@@ -271,20 +320,20 @@ def check_excessive_correlation(df: pd.DataFrame, umbral: float = 0.9) -> dict:
         "umbral_usado": umbral,
     } 
 
-def run_full_diagnostic(df: pd.DataFrame) -> dict:
+def run_full_diagnostic(df: pd.DataFrame, params: dict) -> dict:
     # junta los 16 puntos del enunciado en un solo reporte
     return {
         "filas": int(len(df)),
         "columnas": int(df.shape[1]),
         "missing_values": check_missing_values(df),
         "duplicados": check_duplicates(df),
-        "valores_imposibles": check_impossible_values(df),
+        "valores_imposibles": check_impossible_values(df, params),
         "tipos": check_dtypes(df),
-        "categorias": check_categorical_consistency(df),
+        "categorias": check_categorical_consistency(df, params),
         "fechas_invalidas": "no aplica: AI4I no tiene columna de fecha, es un dataset transversal",
         "outliers": check_outliers(df),
         "skewness": check_skewness(df),
-        "consistencia_unidades": check_unit_consistency(df),
+        "consistencia_unidades": check_unit_consistency(df, params),
         "leakage": check_leakage(df),
         "imbalance": check_imbalance(df),
         "gaps_temporales": "no aplica: mismo motivo que fechas_invalidas, no hay columna temporal",
@@ -302,9 +351,12 @@ def save_report(reporte: dict) -> None:
 
 
 if __name__ == "__main__":
+    # Se carga params.yaml y se pasa como
+    # argumento a las funciones que lo necesitan
+    params = load_params()
     df = load_raw_data()
 
-    reporte = run_full_diagnostic(df)
+    reporte = run_full_diagnostic(df, params)
     save_report(reporte)
 
     print("\n=== RESUMEN DATA QUALITY - AI4I (16 puntos) ===")
@@ -336,7 +388,7 @@ if __name__ == "__main__":
     print(f"9. valores extremos (Rotational speed, IQR): {reporte['outliers']['Rotational speed [rpm]']['cantidad_outliers_iqr']} encontrados")
     print(f"10. cardinalidad de Type: {reporte['categorias']['Type']['cardinalidad']} categorias (L, M, H)")
     print(f"11. skewness mas alta: Rotational speed = {reporte['skewness']['Rotational speed [rpm]']['skewness']} (sesgada)")
-    print(f"12. consistencia de unidades: {reporte['consistencia_unidades']['resultado']}")
+    print(f"12. consistencia de unidades: {reporte['consistencia_unidades']}")
     print(f"13. leakage: {reporte['leakage']['correlacion_con_target']}")
     print(f"14. tasa de fallo (imbalance): {reporte['imbalance']['tasa_fallo']:.2%}")
     print(f"15. gaps temporales: {reporte['gaps_temporales']}")
@@ -446,4 +498,5 @@ tecnico y mostrar en la demo, en vez de depender de lo que se
 imprimio una vez en la terminal y ya no queda registrado. Sirve
 tambien como evidencia de que el diagnostico se corrio con datos
 reales, no solo como una afirmacion sin respaldo.
-""" 
+
+    """

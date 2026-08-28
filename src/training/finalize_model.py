@@ -50,12 +50,7 @@ from src.features.build_features import (
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
-DATA_PATH = (
-    PROJECT_ROOT
-    / "data"
-    / "raw"
-    / "ai4i2020.csv"
-)
+DATA_PATH = Path("data/processed/validated.csv")
 
 ARTIFACTS_DIR = (
     PROJECT_ROOT

@@ -74,12 +74,7 @@ from src.features.build_features import (
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 # Ruta del dataset.
-DATA_PATH = (
-    PROJECT_ROOT
-    / "data"
-    / "raw"
-    / "ai4i2020.csv"
-)
+DATA_PATH = Path("data/processed/validated.csv")
 
 # Carpeta donde almacenaremos artefactos generados
 # durante los experimentos.
@@ -891,6 +886,24 @@ def main() -> None:
 
     best_run_id = runs.iloc[0]["run_id"]
 
+    # MLflow 3 registra los modelos como LoggedModel y no siempre los
+    # expone bajo runs:/<run_id>/model. Buscamos el model_id asociado
+    # directamente a la run ganadora.
+    comparison_experiment = mlflow.get_experiment_by_name(
+        "AI4I_Anomaly_Detection_Comparison"
+    )
+    logged_models = mlflow.search_logged_models(
+        experiment_ids=[comparison_experiment.experiment_id],
+        filter_string=f"source_run_id = '{best_run_id}'",
+    )
+
+    if logged_models.empty:
+        raise RuntimeError(
+            f"No se encontró un modelo MLflow asociado a la run {best_run_id}."
+        )
+
+    model_id = logged_models.iloc[0]["model_id"]
+
     print("\n==========================================")
     print("MODEL REGISTRY")
     print("==========================================")
@@ -904,7 +917,7 @@ def main() -> None:
     # Esto crea (o versiona, si ya existe) el modelo registrado.
     # Nace como "candidato" -- todavía no está en ninguna etapa oficial.
 
-    model_uri = f"runs:/{best_run_id}/model"
+    model_uri = f"models:/{model_id}"
 
     registered_model = mlflow.register_model(
         model_uri=model_uri,
