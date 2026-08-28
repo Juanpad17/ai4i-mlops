@@ -1,0 +1,53 @@
+data:
+  raw_path: "data/raw/ai4i2020.csv"
+  processed_path: "data/processed/ai4i_processed.csv"
+
+model:
+  random_state: 42
+  contamination: 0.034
+
+mlflow:
+  experiment_name: "AI4I-Anomaly-Detection"
+
+quality:
+
+  # Número mínimo de registros permitido.
+  min_rows: 1000
+
+  # Valores permitidos para Type.
+  valid_machine_types:
+    - L
+    - M
+    - H
+
+  # Valores permitidos para Machine failure.
+  valid_failure_values:
+    - 0
+    - 1
+
+  # Rango permitido para temperatura del aire.
+  air_temperature:
+    min: 250
+    max: 400
+
+  # Rango permitido para temperatura de proceso.
+  process_temperature:
+    min: 250
+    max: 450
+
+  # Variables que no pueden tener valores negativos.
+  non_negative_features:
+    - "Rotational speed [rpm]"
+    - "Torque [Nm]"
+    - "Tool wear [min]"
+  
+    # Rango permitido para velocidad rotacional.
+  rotational_speed:
+    min: 100
+    max: 5000
+
+    # Tasa máxima de duplicados permitida.
+  max_duplicate_rate: 0.01
+
+  # Tasa máxima de valores faltantes permitida.
+  max_missing_rate: 0.05
