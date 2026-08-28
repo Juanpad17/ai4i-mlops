@@ -1,0 +1,43 @@
+artifact_path: mlflow-artifacts:/3/models/m-11b79025f4194517bcc8e713475ee87a/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.14.6
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.0
+    skops_trusted_types:
+    - sklearn.metrics._dist_metrics.EuclideanDistance64
+    - sklearn.neighbors._kd_tree.KDTree
+is_signature_from_type_hint: false
+mlflow_version: 3.15.1
+model_id: m-11b79025f4194517bcc8e713475ee87a
+model_size_bytes: 2320299
+model_uuid: m-11b79025f4194517bcc8e713475ee87a
+prompts: null
+run_id: fd0ceadc3dba4e06ab769950b9f59836
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "string", "name": "Type", "required": true}, {"type": "double",
+    "name": "Air temperature [K]", "required": true}, {"type": "double", "name": "Process
+    temperature [K]", "required": true}, {"type": "long", "name": "Rotational speed
+    [rpm]", "required": true}, {"type": "double", "name": "Torque [Nm]", "required":
+    true}, {"type": "long", "name": "Tool wear [min]", "required": true}, {"type":
+    "double", "name": "temperature_difference", "required": true}, {"type": "double",
+    "name": "mechanical_power", "required": true}, {"type": "double", "name": "wear_strain",
+    "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-08-28 21:48:59.553662'
