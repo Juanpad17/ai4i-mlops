@@ -1,0 +1,1 @@
+{"timestamp": "2026-08-29T23:47:49.056802+00:00", "type": "M", "air_temperature_k": 300.0, "process_temperature_k": 310.0, "rotational_speed_rpm": 1500.0, "torque_nm": 40.0, "tool_wear_min": 10.0, "prediction": 0, "anomaly_score": -0.19950834090720515, "model_uri": "models:/AI4I_LOF_Anomaly_Detector/5"}

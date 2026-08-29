@@ -1,0 +1,7 @@
+{"timestamp": "2026-08-29T23:36:08.662471+00:00", "endpoint": "/health", "latency_ms": 33547.8, "status_code": 200, "error": false}
+{"timestamp": "2026-08-29T23:36:09.240349+00:00", "endpoint": "/favicon.ico", "latency_ms": 1.65, "status_code": 404, "error": true}
+{"timestamp": "2026-08-29T23:37:26.806933+00:00", "endpoint": "/health", "latency_ms": 2.97, "status_code": 200, "error": false}
+{"timestamp": "2026-08-29T23:37:28.676836+00:00", "endpoint": "/health", "latency_ms": 2.07, "status_code": 200, "error": false}
+{"timestamp": "2026-08-29T23:37:40.206789+00:00", "endpoint": "/health", "latency_ms": 1.44, "status_code": 200, "error": false}
+{"timestamp": "2026-08-29T23:38:02.001888+00:00", "endpoint": "/health", "latency_ms": 7.11, "status_code": 200, "error": false}
+{"timestamp": "2026-08-29T23:47:49.070289+00:00", "endpoint": "/predict", "latency_ms": 22582.1, "status_code": 200, "error": false}

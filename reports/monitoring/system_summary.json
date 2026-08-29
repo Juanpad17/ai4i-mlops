@@ -1,0 +1,10 @@
+{
+  "timestamp_calculo": "2026-08-29T23:55:23.612536+00:00",
+  "total_requests": 7,
+  "latency_ms_promedio": 8020.73,
+  "latency_ms_p95": 30258.09,
+  "throughput_requests_por_minuto": 0.6,
+  "total_errores": 1,
+  "error_rate": 0.1429,
+  "availability": 1.0
+}
