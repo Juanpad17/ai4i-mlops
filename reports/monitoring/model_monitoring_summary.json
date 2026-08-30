@@ -1,0 +1,26 @@
+{
+  "timestamp_calculo": "2026-08-30T00:12:14.168380+00:00",
+  "model_uri": "models:/AI4I_LOF_Anomaly_Detector/5",
+  "monitoreo_en_vivo": {
+    "descripcion": "Calculado sobre las predicciones reales de la API (sin ground truth)",
+    "total_predicciones": 1,
+    "total_anomalias": 0,
+    "anomaly_rate": 0.0,
+    "distribucion_anomaly_score": {
+      "minimo": -0.1995,
+      "maximo": -0.1995,
+      "media": -0.1995,
+      "mediana": -0.1995,
+      "desviacion_estandar": 0.0
+    }
+  },
+  "evaluacion_offline_con_ground_truth": {
+    "descripcion": "Calculado sobre data/processed/validated.csv, que si tiene Machine failure real",
+    "total_registros_evaluados": 10000,
+    "verdaderos_positivos": 172,
+    "falsos_positivos": 281,
+    "verdaderos_negativos": 9380,
+    "falsos_negativos": 167,
+    "tasa_falsos_positivos": 0.0291
+  }
+}
