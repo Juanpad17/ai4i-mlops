@@ -1,0 +1,73 @@
+{
+  "timestamp_calculo": "2026-08-30T00:06:08.575488+00:00",
+  "filas_referencia": 9661,
+  "filas_produccion": 1,
+  "columnas_analizadas": 9,
+  "columnas_con_drift": [
+    "Type"
+  ],
+  "hay_drift_general": true,
+  "detalle_por_columna": [
+    {
+      "columna": "Air temperature [K]",
+      "ks_statistic": 0.4986,
+      "p_value": 1.0,
+      "drift_detectado": false
+    },
+    {
+      "columna": "Process temperature [K]",
+      "ks_statistic": 0.4983,
+      "p_value": 1.0,
+      "drift_detectado": false
+    },
+    {
+      "columna": "Rotational speed [rpm]",
+      "ks_statistic": 0.5189,
+      "p_value": 0.9623,
+      "drift_detectado": false
+    },
+    {
+      "columna": "Torque [Nm]",
+      "ks_statistic": 0.5049,
+      "p_value": 0.9903,
+      "drift_detectado": false
+    },
+    {
+      "columna": "Tool wear [min]",
+      "ks_statistic": 0.945,
+      "p_value": 0.1101,
+      "drift_detectado": false
+    },
+    {
+      "columna": "temperature_difference",
+      "ks_statistic": 0.5282,
+      "p_value": 0.9437,
+      "drift_detectado": false
+    },
+    {
+      "columna": "mechanical_power",
+      "ks_statistic": 0.5157,
+      "p_value": 0.9687,
+      "drift_detectado": false
+    },
+    {
+      "columna": "wear_strain",
+      "ks_statistic": 0.947,
+      "p_value": 0.1062,
+      "drift_detectado": false
+    },
+    {
+      "columna": "Type",
+      "proporciones_referencia": {
+        "L": 0.5967,
+        "M": 0.3016,
+        "H": 0.1016
+      },
+      "proporciones_produccion": {
+        "M": 1.0
+      },
+      "diferencia_maxima_proporcion": 0.6984,
+      "drift_detectado": true
+    }
+  ]
+}
