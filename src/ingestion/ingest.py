@@ -7,6 +7,7 @@ Descarga un dataset desde una URL configurable y lo almacena en data/raw/, calcu
 
 # Importamos Path para manejar rutas de manera independiente
 from pathlib import Path
+from typing import Optional
 
 # shutil permite copiar archivos (lo usamos al extraer el CSV del ZIP).
 import shutil
@@ -58,7 +59,7 @@ def calculate_hash(file_path: Path) -> str:
     return sha256.hexdigest()
 
 
-def resolve_url(cli_url: str | None) -> str:
+def resolve_url(cli_url: Optional[str]) -> str:
     """
     Decide qué URL usar, en este orden de prioridad:
     1. Argumento --url pasado por línea de comandos.
@@ -167,7 +168,7 @@ def download_dataset(url: str, destination: Path) -> None:
                     file.write(block)
 
 
-def ingest_data(url: str | None = None) -> None:
+def ingest_data(url: Optional[str] = None) -> None:
     """
     Ejecuta la etapa de ingesta del pipeline: descarga el dataset
     desde `url` y calcula su hash SHA256.
