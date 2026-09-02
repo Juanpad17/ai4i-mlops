@@ -56,21 +56,38 @@ def main():
         "4. Entrenamiento del Modelo Base (Isolation Forest)"
     )
 
-    # 5. EXPERIMENTACIÓN MASIVA Y COMPARACIÓN
+    # 5. MONITOREO DE DRIFT Y DESEMPEÑO DEL MODELO
     run_stage(
-        [python_bin, "src/training/experiment.py"], 
-        "5. Comparación Masiva de Modelos en MLflow"
+        [python_bin, "src/monitoring/data_monitoring.py"],
+        "5. Monitoreo de Drift (Data Monitoring)"
     )
 
-    # 6. REGISTRO Y FINALIZACIÓN DEL MODELO GANADOR
+    run_stage(
+        [python_bin, "src/monitoring/model_monitoring.py"],
+        "6. Monitoreo del Modelo (Model Monitoring)"
+    )
+
+    # 7. EVALUACIÓN DE REENTRENAMIENTO
+    run_stage(
+        [python_bin, "src/monitoring/retraining_gate.py"],
+        "7. Evaluación de Trigger de Retraining"
+    )
+
+    # 8. EXPERIMENTACIÓN MASIVA Y COMPARACIÓN
+    run_stage(
+        [python_bin, "src/training/experiment.py"], 
+        "8. Comparación Masiva de Modelos en MLflow"
+    )
+
+    # 9. REGISTRO Y FINALIZACIÓN DEL MODELO GANADOR
     run_stage(
         [python_bin, "src/training/finalize_model.py"], 
-        "6. Cierre de Pipeline y Registro del Modelo Ganador en Producción"
+        "9. Cierre de Pipeline y Registro del Modelo Ganador en Producción"
     )
 
     print("="*60)
     print("🎉 ¡PIPELINE EJECUTADO DE PUNTA A PUNTA DE FORMA IMPECABLE! 🎉")
-    print("Todos los resultados y el modelo final están disponibles en MLflow.")
+    print("Todos los resultados, el modelo final y la decisión de retraining están disponibles.")
     print("="*60)
 
 if __name__ == "__main__":
