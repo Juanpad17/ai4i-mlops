@@ -20,7 +20,6 @@ import mlflow.sklearn
 
 from mlflow.models import infer_signature
 
-from sklearn.model_selection import train_test_split
 from sklearn.neighbors import LocalOutlierFactor
 from sklearn.pipeline import Pipeline
 
@@ -50,7 +49,9 @@ from src.features.build_features import (
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
-DATA_PATH = Path("data/processed/validated.csv")
+TRAIN_PATH = Path("data/processed/train.csv")
+VALIDATION_PATH = Path("data/processed/validation.csv")
+TEST_PATH = Path("data/processed/test.csv")
 
 ARTIFACTS_DIR = (
     PROJECT_ROOT
@@ -78,52 +79,19 @@ REGISTERED_MODEL_NAME = "AI4I_LOF_Anomaly_Detector"
 # CARGA DE DATOS
 # ============================================================
 
-def load_data() -> pd.DataFrame:
+def load_data(path: Path) -> pd.DataFrame:
     """
     Carga el dataset y normaliza los nombres de columnas.
     """
 
-    if not DATA_PATH.exists():
+    if not path.exists():
         raise FileNotFoundError(
-            f"No se encontró el dataset en: {DATA_PATH}"
+            f"No se encontró el dataset en: {path}. Ejecute primero data/split.py."
         )
 
-    dataframe = pd.read_csv(DATA_PATH)
+    dataframe = pd.read_csv(path)
 
     return dataframe
-
-
-# ============================================================
-# DIVISIÓN FINAL DE DATOS
-# ============================================================
-
-def split_final_dataset(X, y):
-    """
-    Reconstruye exactamente la misma separación utilizada
-    durante la experimentación.
-
-    El 20 % reservado originalmente como TEST permanece como
-    conjunto independiente para la evaluación final.
-    """
-
-    # Esta es exactamente la primera división utilizada
-    # durante experiment.py.
-    X_train_validation, X_test, y_train_validation, y_test = (
-        train_test_split(
-            X,
-            y,
-            test_size=0.20,
-            random_state=RANDOM_SEED,
-            stratify=y,
-        )
-    )
-
-    return (
-        X_train_validation,
-        X_test,
-        y_train_validation,
-        y_test,
-    )
 
 
 # ============================================================
@@ -251,30 +219,25 @@ def main() -> None:
     # 1. CARGAR DATASET
     # --------------------------------------------------------
 
-    dataframe = load_data()
+    train_dataframe = load_data(TRAIN_PATH)
+    validation_dataframe = load_data(VALIDATION_PATH)
+    test_dataframe = load_data(TEST_PATH)
 
-    X, y = split_features_target(
-        dataframe
-    )
+    X_train, y_train = split_features_target(train_dataframe)
+    X_validation, y_validation = split_features_target(validation_dataframe)
+    X_test, y_test = split_features_target(test_dataframe)
 
-    # Aplicamos exactamente el mismo Feature Engineering
-    # que se utilizó durante experimentación.
-    X = build_features(X)
+    X_train = build_features(X_train)
+    X_validation = build_features(X_validation)
+    X_test = build_features(X_test)
 
 
     # --------------------------------------------------------
     # 2. RECUPERAR TEST FINAL
     # --------------------------------------------------------
 
-    (
-        X_train_validation,
-        X_test,
-        y_train_validation,
-        y_test,
-    ) = split_final_dataset(
-        X,
-        y
-    )
+    X_train_validation = pd.concat([X_train, X_validation], axis=0)
+    y_train_validation = pd.concat([y_train, y_validation], axis=0)
 
     print(
         f"Train + Validation: {len(X_train_validation)}"
@@ -383,7 +346,7 @@ def main() -> None:
 
         mlflow.log_param(
             "feature_set",
-            ",".join(X.columns)
+            ",".join(X_train.columns)
         )
 
         mlflow.log_param(

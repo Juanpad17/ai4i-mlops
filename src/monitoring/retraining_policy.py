@@ -21,15 +21,23 @@ DEFAULT_THRESHOLDS = {
 
 def _get_metric(model_summary: Dict[str, Any], metric_name: str, default: float | None = None) -> float | None:
     """Obtiene una métrica desde el resumen del modelo, soportando estructura anidada."""
-    performance = model_summary.get("performance", {}) if isinstance(model_summary, dict) else {}
-    if isinstance(performance, dict):
-        value = performance.get(metric_name)
+    if not isinstance(model_summary, dict):
+        return default
+
+    candidates = [model_summary, model_summary.get("performance", {})]
+    candidates.append(model_summary.get("evaluacion_offline_con_ground_truth", {}))
+    aliases = {
+        "false_positive_rate": "tasa_falsos_positivos",
+    }
+
+    for container in candidates:
+        if not isinstance(container, dict):
+            continue
+        value = container.get(metric_name)
+        if value is None:
+            value = container.get(aliases.get(metric_name, ""))
         if value is not None:
             return float(value)
-
-    value = model_summary.get(metric_name)
-    if value is not None:
-        return float(value)
 
     return default
 
@@ -56,7 +64,11 @@ def should_retrain(
         model_summary = {}
 
     psi_promedio = float(drift_summary.get("psi_promedio", 0.0) or 0.0)
-    variables_con_drift = drift_summary.get("variables_con_drift", []) or []
+    variables_con_drift = (
+        drift_summary.get("variables_con_drift")
+        or drift_summary.get("columnas_con_drift", [])
+        or []
+    )
     variables_con_drift = list(variables_con_drift)
 
     drift_severo = (
