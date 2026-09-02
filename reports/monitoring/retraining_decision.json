@@ -1,0 +1,27 @@
+{
+  "decision": {
+    "trigger_retraining": false,
+    "reason": "No hay métricas de performance disponibles para confirmar degradación.",
+    "drift_severo": false,
+    "performance_degraded": false,
+    "psi_promedio": 0.0,
+    "variables_con_drift": [],
+    "metrics": {
+      "f1": null,
+      "recall": null,
+      "false_positive_rate": null
+    },
+    "thresholds": {
+      "psi_severe": 0.25,
+      "min_drift_variables": 2,
+      "f1_threshold": 0.8,
+      "recall_threshold": 0.9,
+      "false_positive_rate_threshold": 0.15
+    }
+  },
+  "status": "NO_RETRAINING",
+  "summary": {
+    "drift_summary_path": "reports\\monitoring\\data_drift_summary.json",
+    "model_summary_path": "reports\\monitoring\\model_monitoring_summary.json"
+  }
+}
