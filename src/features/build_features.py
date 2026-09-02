@@ -22,8 +22,9 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     
     Transforma las variables físicas crudas en indicadores de esfuerzo mecánico 
     y térmico. Esta función se ejecuta de forma idéntica en:
-      1. El entrenamiento (Offline): Aplicado sobre data/processed/train.csv.
-      2. La inferencia (Online/Producción): Aplicado sobre payloads JSON/API.
+        1. El entrenamiento (Offline): Aplicado sobre train.csv,
+            validation.csv y test.csv.
+        2. La inferencia (Online/Producción): Aplicado sobre payloads JSON/API.
       
     Objetivo MLOps: Garantizar la paridad de los datos y evitar el 
     'Training-Serving Skew' (comportamiento dispar entre desarrollo y producción).
