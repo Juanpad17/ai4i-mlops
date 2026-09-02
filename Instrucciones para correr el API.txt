@@ -1,11 +1,103 @@
-python -m uvicorn src.api.app:app --reload --port 8000
+GUIA PARA PROBAR EL API
+=======================
 
-GET  http://127.0.0.1:8000/health
-POST http://127.0.0.1:8000/predict
+SERVICIOS
+---------
+GET /health: verifica que la API pueda cargar el modelo.
+POST /predict: recibe una lectura de maquina y devuelve la prediccion.
+GET /docs: abre la documentacion interactiva de Swagger.
 
-Para usar otro modelo cambio:
-$env:MODEL_URI="models:/AI4I_LOF_Anomaly_Detector/6" el numero
-python -m uvicorn src.api.app:app --port 8000
+REQUISITOS
+----------
+Primero iniciar MLflow en una terminal:
 
-asi se carga el api:
-python -m uvicorn src.api.app:app --reload --port 8000
+	mlflow server --host 0.0.0.0 --port 5000
+
+Luego iniciar la API localmente:
+
+	.\.venv\Scripts\Activate.ps1
+	python -m uvicorn src.api.app:app --reload --port 8000
+
+PRUEBA DE HEALTH
+----------------
+Abrir en el navegador:
+
+	http://localhost:8000/health
+
+O ejecutar en PowerShell:
+
+	Invoke-RestMethod http://localhost:8000/health
+
+Respuesta esperada:
+
+	status       : ok
+	model_uri    : models:/AI4I_LOF_Anomaly_Detector/5
+	tracking_uri : http://localhost:5000
+
+PRUEBA DE PREDICT EN SWAGGER
+----------------------------
+1. Abrir http://localhost:8000/docs.
+2. Buscar POST /predict.
+3. Pulsar Try it out y despues Execute.
+4. Ingresar este JSON:
+
+	{
+	  "type": "L",
+	  "air_temperature_k": 298.0,
+	  "process_temperature_k": 308.0,
+	  "rotational_speed_rpm": 1551.0,
+	  "torque_nm": 42.0,
+	  "tool_wear_min": 100.0
+	}
+
+Los campos obligatorios son type, air_temperature_k, process_temperature_k,
+rotational_speed_rpm, torque_nm y tool_wear_min.
+type solo acepta L, M o H. Temperaturas y velocidad deben ser mayores que 0.
+Torque y desgaste deben ser mayores o iguales que 0.
+
+PRUEBA DE PREDICT EN POWERSHELL
+--------------------------------
+	$body = @{
+		 type = "L"
+		 air_temperature_k = 298.0
+		 process_temperature_k = 308.0
+		 rotational_speed_rpm = 1551.0
+		 torque_nm = 42.0
+		 tool_wear_min = 100.0
+	} | ConvertTo-Json
+
+	Invoke-RestMethod -Uri http://localhost:8000/predict -Method Post `
+		 -ContentType "application/json" -Body $body
+
+Respuesta esperada:
+
+	prediction    : 0 o 1
+	label         : normal o anomaly
+	anomaly_score : valor numerico
+	model_uri     : models:/AI4I_LOF_Anomaly_Detector/5
+
+PRUEBA DE ERROR 422
+-------------------
+Enviar type = X o un valor negativo en rotational_speed_rpm.
+La API debe responder HTTP 422 porque los datos no cumplen el esquema.
+
+LOGS
+----
+Las predicciones se guardan en:
+	reports/monitoring/production_log.jsonl
+
+Las metricas de latencia y errores se guardan en:
+	reports/monitoring/system_metrics.jsonl
+
+Consultar las ultimas predicciones:
+	Get-Content reports\monitoring\production_log.jsonl | Select-Object -Last 5
+
+ERRORES FRECUENTES
+------------------
+HTTP 503 en /health: MLflow no esta activo o el modelo no existe.
+HTTP 500 en /predict: revisar primero /health y la conexion con MLflow.
+HTTP 422 en /predict: revisar los nombres, tipos y rangos del JSON.
+
+Para usar otro modelo:
+	$env:MODEL_URI="models:/AI4I_LOF_Anomaly_Detector/6"
+	python -m uvicorn src.api.app:app --port 8000
