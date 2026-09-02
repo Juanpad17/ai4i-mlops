@@ -1,0 +1,77 @@
+PASOS PARA CORRER Y PROBAR LA API EN DOCKER
+===========================================
+
+1) Desde la raiz del proyecto, construir la imagen:
+
+   docker build -t ai4imlops .
+
+2) Ejecutar el contenedor con el puerto 8000 mapeado:
+
+   docker run --rm -p 8000:8000 ai4imlops
+
+3) Verificar que la API se levantó correctamente:
+
+   http://localhost:8000/health
+
+   O con curl:
+
+   curl http://localhost:8000/health
+
+4) Ver la documentación Swagger/OpenAPI:
+
+   http://localhost:8000/docs
+
+5) Probar el servicio de prediccion:
+
+   curl -X POST "http://localhost:8000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "type": "L",
+       "air_temperature_k": 298.0,
+       "process_temperature_k": 308.0,
+       "rotational_speed_rpm": 1551.0,
+       "torque_nm": 42.0,
+       "tool_wear_min": 100
+     }'
+
+6) Si quieres ver el contenido de la respuesta JSON esperado, deberías recibir algo similar a:
+
+   {
+     "prediction": 0,
+     "label": "normal",
+     "anomaly_score": 0.1234,
+     "model_uri": "models:/AI4I_LOF_Anomaly_Detector/5"
+   }
+
+7) Si necesitas ver los logs del contenedor:
+
+   docker ps
+   docker logs -f <container_id>
+
+8) Si quieres parar el contenedor:
+
+   Ctrl + C  (si lo ejecutaste en primer plano)
+   o
+   docker stop <container_id>
+
+9) Si quieres cambiar el modelo usado por la API, define la variable de entorno antes de correr el contenedor:
+
+   $env:MODEL_URI="models:/AI4I_LOF_Anomaly_Detector/6"
+   docker run --rm -p 8000:8000 -e MODEL_URI="models:/AI4I_LOF_Anomaly_Detector/6" ai4imlops
+
+SERVICIOS EXPUESTOS
+==================
+
+- GET /health
+  Verifica si la API y el modelo están disponibles.
+
+- POST /predict
+  Recibe una lectura de la máquina y devuelve la predicción del modelo.
+
+- GET /docs
+  Documentación interactiva de FastAPI.
+
+NOTA:
+- El contenedor expone el puerto 8000.
+- El comando de arranque debe apuntar a la app real: src.api.app:app
+- Si la API falla al iniciar, revisa que el archivo Dockerfile tenga la instrucción correcta.
