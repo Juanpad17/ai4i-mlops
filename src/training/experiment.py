@@ -42,9 +42,6 @@ from sklearn.svm import OneClassSVM
 # en un único objeto reproducible.
 from sklearn.pipeline import Pipeline
 
-# train_test_split permite separar los datos en subconjuntos.
-from sklearn.model_selection import train_test_split
-
 # Métricas utilizadas para evaluar los modelos.
 from sklearn.metrics import (
     precision_score,
@@ -74,7 +71,9 @@ from src.features.build_features import (
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 # Ruta del dataset.
-DATA_PATH = Path("data/processed/validated.csv")
+TRAIN_PATH = Path("data/processed/train.csv")
+VALIDATION_PATH = Path("data/processed/validation.csv")
+TEST_PATH = Path("data/processed/test.csv")
 
 # Carpeta donde almacenaremos artefactos generados
 # durante los experimentos.
@@ -107,7 +106,7 @@ DATA_VERSION = "ai4i_uci_601_v1"
 # CARGA DEL DATASET
 # ============================================================
 
-def load_data() -> pd.DataFrame:
+def load_data(path: Path) -> pd.DataFrame:
     """
     Carga el dataset AI4I.
 
@@ -119,82 +118,18 @@ def load_data() -> pd.DataFrame:
 
     # Verificamos que la etapa de ingesta haya generado
     # correctamente el archivo raw.
-    if not DATA_PATH.exists():
+    if not path.exists():
 
         raise FileNotFoundError(
-            f"No se encontró el dataset en: {DATA_PATH}"
+            f"No se encontró el dataset en: {path}. Ejecute primero data/split.py."
         )
 
     # Cargamos los datos.
     dataframe = pd.read_csv(
-        DATA_PATH
+        path
     )
 
     return dataframe
-
-
-# ============================================================
-# DIVISIÓN TRAIN / VALIDATION / TEST
-# ============================================================
-
-def split_dataset(X, y):
-    """
-    Divide los datos en:
-
-        60 % entrenamiento
-        20 % validación
-        20 % test
-
-    La validación será utilizada para seleccionar el mejor
-    modelo.
-
-    El test se conservará para la evaluación final posterior.
-    """
-
-    # --------------------------------------------------------
-    # PRIMERA DIVISIÓN
-    # --------------------------------------------------------
-    #
-    # 80 % queda temporalmente para entrenamiento/validación.
-    # 20 % se reserva como test final.
-    X_train_val, X_test, y_train_val, y_test = train_test_split(
-        X,
-        y,
-        test_size=0.20,
-        random_state=RANDOM_SEED,
-        stratify=y,
-    )
-
-    # --------------------------------------------------------
-    # SEGUNDA DIVISIÓN
-    # --------------------------------------------------------
-    #
-    # Del 80 % anterior tomamos:
-    #
-    # 75 % → entrenamiento
-    # 25 % → validación
-    #
-    # Eso equivale finalmente a:
-    #
-    # 60 % train
-    # 20 % validation
-    # 20 % test
-    X_train, X_validation, y_train, y_validation = train_test_split(
-        X_train_val,
-        y_train_val,
-        test_size=0.25,
-        random_state=RANDOM_SEED,
-        stratify=y_train_val,
-    )
-
-    return (
-        X_train,
-        X_validation,
-        X_test,
-        y_train,
-        y_validation,
-        y_test,
-    )
 
 
 # ============================================================
@@ -509,32 +444,21 @@ def main() -> None:
     # 1. CARGAR DATOS
     # --------------------------------------------------------
 
-    dataframe = load_data()
+    train_dataframe = load_data(TRAIN_PATH)
+    validation_dataframe = load_data(VALIDATION_PATH)
+    test_dataframe = load_data(TEST_PATH)
 
-    # Utilizamos la misma selección de features definida
-    # anteriormente.
-    X, y = split_features_target(
-        dataframe
-    )
+    X_train, y_train = split_features_target(train_dataframe)
+    X_validation, y_validation = split_features_target(validation_dataframe)
+    X_test, y_test = split_features_target(test_dataframe)
 
-    # Calculamos las features adicionales definidas en Feature Engineering.    
-    X = build_features(X)
+    X_train = build_features(X_train)
+    X_validation = build_features(X_validation)
+    X_test = build_features(X_test)
 
     # --------------------------------------------------------
     # 2. TRAIN / VALIDATION / TEST
     # --------------------------------------------------------
-
-    (
-        X_train,
-        X_validation,
-        X_test,
-        y_train,
-        y_validation,
-        y_test,
-    ) = split_dataset(
-        X,
-        y
-    )
 
     print(
         f"Train:      {len(X_train)} registros"
@@ -657,7 +581,7 @@ def main() -> None:
 
             mlflow.log_param(
                 "feature_set",
-                ",".join(X.columns)
+                ",".join(X_train.columns)
             )
 
             mlflow.log_param(
