@@ -9,7 +9,7 @@ P_production(X)).
 Tecnica usada: Kolmogorov-Smirnov para las 8 variables numericas,
 y comparacion de proporciones para la unica variable categorica (Type).
 
-Referencia: data/processed/validated.csv, filtrado a Machine failure == 0
+Referencia: data/processed/train.csv, filtrado a Machine failure == 0
 (el modelo se entreno solo con comportamiento normal de la maquinaria).
 
 Produccion: reports/monitoring/production_log.jsonl (las predicciones
@@ -26,7 +26,7 @@ from scipy import stats
 from src.features.build_features import build_features
 
 
-REFERENCE_PATH = Path("data/processed/validated.csv")
+REFERENCE_PATH = Path("data/processed/train.csv")
 PRODUCTION_LOG_PATH = Path("reports/monitoring/production_log.jsonl")
 DRIFT_SUMMARY_PATH = Path("reports/monitoring/data_drift_summary.json")
 
