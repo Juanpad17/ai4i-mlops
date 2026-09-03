@@ -1,5 +1,5 @@
 {
-  "timestamp_simulacion": "2026-08-31T02:12:19.451533+00:00",
+  "timestamp_simulacion": "2026-09-03T21:13:15.050056+00:00",
   "dataset_referencia_registros": 10000,
   "tipos_contaminacion_testeados": 6,
   "batches_bloqueados_exitosamente": 6,
@@ -31,7 +31,7 @@
       "tamaño_batch": 10000,
       "validacion": {
         "batch": "contaminado_missing_values",
-        "timestamp": "2026-08-30T20:12:19.369955",
+        "timestamp": "2026-09-03T15:13:14.992804",
         "paso_general": false,
         "reglas": [
           {
@@ -72,7 +72,7 @@
           {
             "regla": "tipos_maquina_validos",
             "paso": true,
-            "detalle": "tipos encontrados={'L', 'M', 'H'}, validos={'L', 'M', 'H'}"
+            "detalle": "tipos encontrados={'H', 'M', 'L'}, validos={'H', 'M', 'L'}"
           },
           {
             "regla": "temperatura_aire_en_rango",
@@ -100,7 +100,7 @@
       "reglas_fallidas": [
         "missing_bajo_control"
       ],
-      "timestamp": "2026-08-31T02:12:19.370841+00:00"
+      "timestamp": "2026-09-03T21:13:14.993809+00:00"
     },
     {
       "tipo_contaminacion": "duplicated_rows",
@@ -115,7 +115,7 @@
       "tamaño_batch": 10500,
       "validacion": {
         "batch": "contaminado_duplicated_rows",
-        "timestamp": "2026-08-30T20:12:19.398234",
+        "timestamp": "2026-09-03T15:13:15.009005",
         "paso_general": false,
         "reglas": [
           {
@@ -156,7 +156,7 @@
           {
             "regla": "tipos_maquina_validos",
             "paso": true,
-            "detalle": "tipos encontrados={'L', 'M', 'H'}, validos={'L', 'M', 'H'}"
+            "detalle": "tipos encontrados={'H', 'M', 'L'}, validos={'H', 'M', 'L'}"
           },
           {
             "regla": "temperatura_aire_en_rango",
@@ -184,7 +184,7 @@
       "reglas_fallidas": [
         "duplicados_bajo_control"
       ],
-      "timestamp": "2026-08-31T02:12:19.399007+00:00"
+      "timestamp": "2026-09-03T21:13:15.009645+00:00"
     },
     {
       "tipo_contaminacion": "extreme_outliers",
@@ -208,7 +208,7 @@
       "tamaño_batch": 10000,
       "validacion": {
         "batch": "contaminado_extreme_outliers",
-        "timestamp": "2026-08-30T20:12:19.416644",
+        "timestamp": "2026-09-03T15:13:15.019615",
         "paso_general": false,
         "reglas": [
           {
@@ -249,7 +249,7 @@
           {
             "regla": "tipos_maquina_validos",
             "paso": true,
-            "detalle": "tipos encontrados={'L', 'M', 'H'}, validos={'L', 'M', 'H'}"
+            "detalle": "tipos encontrados={'H', 'M', 'L'}, validos={'H', 'M', 'L'}"
           },
           {
             "regla": "temperatura_aire_en_rango",
@@ -259,7 +259,7 @@
           {
             "regla": "temperatura_proceso_en_rango",
             "paso": false,
-            "detalle": "fuera_de_rango=19, rango={'min': 250, 'max': 450}"
+            "detalle": "fuera_de_rango=18, rango={'min': 250, 'max': 450}"
           },
           {
             "regla": "rpm_en_rango",
@@ -281,7 +281,7 @@
         "rpm_en_rango",
         "proceso_mayor_igual_ambiente"
       ],
-      "timestamp": "2026-08-31T02:12:19.417899+00:00"
+      "timestamp": "2026-09-03T21:13:15.020653+00:00"
     },
     {
       "tipo_contaminacion": "incorrect_datatype",
@@ -314,7 +314,7 @@
       "reglas_fallidas": [
         "validación_imposible_tipos_o_schema_incorrecto"
       ],
-      "timestamp": "2026-08-31T02:12:19.429848+00:00"
+      "timestamp": "2026-09-03T21:13:15.030569+00:00"
     },
     {
       "tipo_contaminacion": "unknown_category",
@@ -327,9 +327,9 @@
           "H"
         ],
         "categorias_nuevas_introducidas": [
-          "UNKNOWN",
+          "EXPERIMENTAL",
           "X",
-          "EXPERIMENTAL"
+          "UNKNOWN"
         ],
         "cantidad_registros_afectados": 60,
         "detalles": [
@@ -339,7 +339,7 @@
       "tamaño_batch": 10000,
       "validacion": {
         "batch": "contaminado_unknown_category",
-        "timestamp": "2026-08-30T20:12:19.441351",
+        "timestamp": "2026-09-03T15:13:15.041929",
         "paso_general": false,
         "reglas": [
           {
@@ -380,7 +380,7 @@
           {
             "regla": "tipos_maquina_validos",
             "paso": false,
-            "detalle": "tipos encontrados={'UNKNOWN', 'M', 'H', 'L', 'EXPERIMENTAL', 'X'}, validos={'L', 'M', 'H'}"
+            "detalle": "tipos encontrados={'M', 'H', 'EXPERIMENTAL', 'UNKNOWN', 'X', 'L'}, validos={'H', 'M', 'L'}"
           },
           {
             "regla": "temperatura_aire_en_rango",
@@ -408,7 +408,7 @@
       "reglas_fallidas": [
         "tipos_maquina_validos"
       ],
-      "timestamp": "2026-08-31T02:12:19.442178+00:00"
+      "timestamp": "2026-09-03T21:13:15.042537+00:00"
     },
     {
       "tipo_contaminacion": "schema_modification",
@@ -444,7 +444,7 @@
       "reglas_fallidas": [
         "validación_imposible_tipos_o_schema_incorrecto"
       ],
-      "timestamp": "2026-08-31T02:12:19.451458+00:00"
+      "timestamp": "2026-09-03T21:13:15.049994+00:00"
     }
   ]
 }

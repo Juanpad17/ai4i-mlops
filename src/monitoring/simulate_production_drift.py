@@ -9,11 +9,11 @@ detectar data drift mediante técnicas estadísticas.
 Flujo conceptual:
   REFERENCE (datos de entrenamiento)
        ↓
-  PRODUCTION BATCH 1 (cambio leve: PSI ≈ 0.04, sin drift)
-       ↓
-  PRODUCTION BATCH 2 (cambio moderado: PSI ≈ 0.11, warning)
-       ↓
-  PRODUCTION BATCH 3 (cambio severo: PSI ≈ 0.31, alert)
+  PRODUCTION BATCH 1 (cambio leve: PSI <= 0.04, OK)
+      ↓
+  PRODUCTION BATCH 2 (cambio moderado: PSI entre 0.04 y 0.11, warning)
+      ↓
+  PRODUCTION BATCH 3 (cambio severo: PSI > 0.11, alert)
 
 Técnica utilizada: 
   - PSI (Population Stability Index) para variables numéricas
@@ -176,9 +176,9 @@ def simular_batch_con_drift(df_referencia: pd.DataFrame,
     Genera un batch simulado con drift controlado.
     
     Se aplican transformaciones progresivas según el número de batch:
-    - BATCH 1 (intensidad ≈ 0.1): cambios leves
-    - BATCH 2 (intensidad ≈ 0.3): cambios moderados
-    - BATCH 3 (intensidad ≈ 0.6): cambios severos
+    - BATCH 1 (intensidad ≈ 0.01): cambios leves
+    - BATCH 2 (intensidad ≈ 0.03): cambios moderados
+    - BATCH 3 (intensidad ≈ 0.10): cambios severos
     
     Tipos de cambios simulados:
     1. Shift en temperatura: aumento gradual de proceso
@@ -312,9 +312,9 @@ def simular_batches_produccion() -> Dict:
     
     # SIMULACIÓN: 3 batches con intensidad de drift creciente
     configuraciones_batches = [
-        (1, 0.10, "LEVE"),
-        (2, 0.30, "MODERADA"),
-        (3, 0.60, "SEVERA"),
+        (1, 0.01, "LEVE"),
+        (2, 0.03, "MODERADA"),
+        (3, 0.10, "SEVERA"),
     ]
     
     for batch_num, intensidad, severidad in configuraciones_batches:
@@ -429,14 +429,14 @@ def imprimir_resumen_ejecucion(resumen: Dict) -> None:
     print("="*70)
     print("""
 El sistema demuestra capacidad de:
-  ✓ Detectar cambios leves en distribuciones (BATCH 1, PSI ≈ 0.04)
-  ✓ Identificar cambios moderados (BATCH 2, PSI ≈ 0.11)
-  ✓ Alertar cambios críticos (BATCH 3, PSI ≈ 0.31)
+    ✓ Detectar cambios leves en distribuciones (BATCH 1, estado OK)
+    ✓ Identificar cambios moderados (BATCH 2, estado WARNING)
+    ✓ Alertar cambios críticos (BATCH 3, estado ALERT)
 
 Mecanismo: Population Stability Index (PSI) con umbrales justificados:
   - OK (PSI ≤ 0.04): Distribución estable, sin acción
-  - WARNING (0.04 < PSI ≤ 0.11): Monitoreo recomendado
-  - ALERT (PSI > 0.11): Investigación urgente requerida
+    - WARNING (0.04 < PSI ≤ 0.11): Monitoreo recomendado
+    - ALERT (PSI > 0.11): Investigación urgente requerida
 """)
     print("="*70 + "\n")
 
