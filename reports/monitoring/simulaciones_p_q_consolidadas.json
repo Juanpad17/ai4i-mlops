@@ -1,0 +1,692 @@
+{
+  "timestamp": "2026-08-31T02:12:19.769893+00:00",
+  "simulaciones_completadas": [
+    "punto_p_drift",
+    "punto_q_calidad"
+  ],
+  "datos": {
+    "punto_p_drift": {
+      "timestamp_simulacion": "2026-08-31T02:12:16.832502+00:00",
+      "referencia_registros": 9661,
+      "batches_simulados": 3,
+      "capacidad_deteccion": "VERIFICADA",
+      "descripcion": "El sistema detecta cambios progresivos en P(X) usando PSI",
+      "batches": [
+        {
+          "batch_numero": 1,
+          "severidad_simulada": "LEVE",
+          "intensidad_drift": 0.1,
+          "cantidad_registros": 9661,
+          "timestamp": "2026-08-31T02:12:16.809404+00:00",
+          "psi_promedio": 0.6525,
+          "psi_promedio_estado": "ALERT",
+          "variables_con_drift": [
+            "Process temperature [K]",
+            "Rotational speed [rpm]",
+            "temperature_difference"
+          ],
+          "cantidad_variables_con_drift": 3,
+          "estado_global": "ALERT",
+          "psi_por_variable": {
+            "Air temperature [K]": {
+              "psi": 0.0006,
+              "estado": "OK"
+            },
+            "Process temperature [K]": {
+              "psi": 1.507,
+              "estado": "ALERT"
+            },
+            "Rotational speed [rpm]": {
+              "psi": 0.0477,
+              "estado": "WARNING"
+            },
+            "Torque [Nm]": {
+              "psi": 0.0014,
+              "estado": "OK"
+            },
+            "Tool wear [min]": {
+              "psi": 0.0015,
+              "estado": "OK"
+            },
+            "temperature_difference": {
+              "psi": 3.6446,
+              "estado": "ALERT"
+            },
+            "mechanical_power": {
+              "psi": 0.0169,
+              "estado": "OK"
+            },
+            "wear_strain": {
+              "psi": 0.0005,
+              "estado": "OK"
+            }
+          },
+          "cambios_type": {
+            "proporciones_referencia": {
+              "L": 0.5967,
+              "M": 0.3016,
+              "H": 0.1016
+            },
+            "proporciones_produccion": {
+              "L": 0.5338,
+              "M": 0.3076,
+              "H": 0.1586
+            },
+            "cambios_por_categoria": {
+              "M": 0.006,
+              "H": 0.0569,
+              "L": 0.0629
+            },
+            "max_cambio": 0.0629,
+            "estado": "OK"
+          },
+          "justificacion_thresholds": {
+            "psi_ok": "<= 0.04 (sin cambio significativo)",
+            "psi_warning": "0.04 - 0.11 (cambio moderado)",
+            "psi_alert": "> 0.11 (cambio crítico)"
+          }
+        },
+        {
+          "batch_numero": 2,
+          "severidad_simulada": "MODERADA",
+          "intensidad_drift": 0.3,
+          "cantidad_registros": 9661,
+          "timestamp": "2026-08-31T02:12:16.820006+00:00",
+          "psi_promedio": 5.2507,
+          "psi_promedio_estado": "ALERT",
+          "variables_con_drift": [
+            "Process temperature [K]",
+            "Rotational speed [rpm]",
+            "temperature_difference",
+            "mechanical_power"
+          ],
+          "cantidad_variables_con_drift": 4,
+          "estado_global": "ALERT",
+          "psi_por_variable": {
+            "Air temperature [K]": {
+              "psi": 0.0014,
+              "estado": "OK"
+            },
+            "Process temperature [K]": {
+              "psi": 9.7768,
+              "estado": "ALERT"
+            },
+            "Rotational speed [rpm]": {
+              "psi": 0.3738,
+              "estado": "ALERT"
+            },
+            "Torque [Nm]": {
+              "psi": 0.0008,
+              "estado": "OK"
+            },
+            "Tool wear [min]": {
+              "psi": 0.0021,
+              "estado": "OK"
+            },
+            "temperature_difference": {
+              "psi": 31.6951,
+              "estado": "ALERT"
+            },
+            "mechanical_power": {
+              "psi": 0.1543,
+              "estado": "ALERT"
+            },
+            "wear_strain": {
+              "psi": 0.0012,
+              "estado": "OK"
+            }
+          },
+          "cambios_type": {
+            "proporciones_referencia": {
+              "L": 0.5967,
+              "M": 0.3016,
+              "H": 0.1016
+            },
+            "proporciones_produccion": {
+              "L": 0.4384,
+              "M": 0.2991,
+              "H": 0.2625
+            },
+            "cambios_por_categoria": {
+              "M": 0.0025,
+              "H": 0.1609,
+              "L": 0.1584
+            },
+            "max_cambio": 0.1609,
+            "estado": "WARNING"
+          },
+          "justificacion_thresholds": {
+            "psi_ok": "<= 0.04 (sin cambio significativo)",
+            "psi_warning": "0.04 - 0.11 (cambio moderado)",
+            "psi_alert": "> 0.11 (cambio crítico)"
+          }
+        },
+        {
+          "batch_numero": 3,
+          "severidad_simulada": "SEVERA",
+          "intensidad_drift": 0.6,
+          "cantidad_registros": 9661,
+          "timestamp": "2026-08-31T02:12:16.832457+00:00",
+          "psi_promedio": 13.5422,
+          "psi_promedio_estado": "ALERT",
+          "variables_con_drift": [
+            "Process temperature [K]",
+            "Rotational speed [rpm]",
+            "temperature_difference",
+            "mechanical_power"
+          ],
+          "cantidad_variables_con_drift": 4,
+          "estado_global": "ALERT",
+          "psi_por_variable": {
+            "Air temperature [K]": {
+              "psi": 0.0017,
+              "estado": "OK"
+            },
+            "Process temperature [K]": {
+              "psi": 48.8887,
+              "estado": "ALERT"
+            },
+            "Rotational speed [rpm]": {
+              "psi": 1.5327,
+              "estado": "ALERT"
+            },
+            "Torque [Nm]": {
+              "psi": 0.0015,
+              "estado": "OK"
+            },
+            "Tool wear [min]": {
+              "psi": 0.0014,
+              "estado": "OK"
+            },
+            "temperature_difference": {
+              "psi": 57.1243,
+              "estado": "ALERT"
+            },
+            "mechanical_power": {
+              "psi": 0.7862,
+              "estado": "ALERT"
+            },
+            "wear_strain": {
+              "psi": 0.0012,
+              "estado": "OK"
+            }
+          },
+          "cambios_type": {
+            "proporciones_referencia": {
+              "L": 0.5967,
+              "M": 0.3016,
+              "H": 0.1016
+            },
+            "proporciones_produccion": {
+              "H": 0.3831,
+              "L": 0.3108,
+              "M": 0.3061
+            },
+            "cambios_por_categoria": {
+              "M": 0.0045,
+              "H": 0.2814,
+              "L": 0.2859
+            },
+            "max_cambio": 0.2859,
+            "estado": "WARNING"
+          },
+          "justificacion_thresholds": {
+            "psi_ok": "<= 0.04 (sin cambio significativo)",
+            "psi_warning": "0.04 - 0.11 (cambio moderado)",
+            "psi_alert": "> 0.11 (cambio crítico)"
+          }
+        }
+      ]
+    },
+    "punto_q_calidad": {
+      "timestamp_simulacion": "2026-08-31T02:12:19.451533+00:00",
+      "dataset_referencia_registros": 10000,
+      "tipos_contaminacion_testeados": 6,
+      "batches_bloqueados_exitosamente": 6,
+      "tasa_bloqueo_exitoso": 1.0,
+      "sistema_validacion": "OPERATIVO",
+      "capacidades_verificadas": [
+        "DETECTA cambios en distribución de datos",
+        "BLOQUEA batches contaminados",
+        "REGISTRA incidentes en logs"
+      ],
+      "dataset_original_intacto": true,
+      "resultados_por_contaminacion": [
+        {
+          "tipo_contaminacion": "missing_values",
+          "detalles_contaminacion": {
+            "tipo": "missing_values",
+            "descripcion": "Introduce NaN en columnas numéricas",
+            "tasa_introducida": 0.15,
+            "tasa_resultante_missing": 0.0536,
+            "registros_afectados": 7500,
+            "detalles": [
+              "Air temperature [K]: 1500 NaN",
+              "Process temperature [K]: 1500 NaN",
+              "Rotational speed [rpm]: 1500 NaN",
+              "Torque [Nm]: 1500 NaN",
+              "Tool wear [min]: 1500 NaN"
+            ]
+          },
+          "tamaño_batch": 10000,
+          "validacion": {
+            "batch": "contaminado_missing_values",
+            "timestamp": "2026-08-30T20:12:19.369955",
+            "paso_general": false,
+            "reglas": [
+              {
+                "regla": "minimo_filas",
+                "paso": true,
+                "detalle": "filas=10000, minimo=1000"
+              },
+              {
+                "regla": "estructura_completa",
+                "paso": true,
+                "detalle": "ok"
+              },
+              {
+                "regla": "duplicados_bajo_control",
+                "paso": true,
+                "detalle": "tasa=0.0000, maximo=0.01"
+              },
+              {
+                "regla": "missing_bajo_control",
+                "paso": false,
+                "detalle": "tasa=0.0536, maximo=0.05"
+              },
+              {
+                "regla": "target_sin_nulos",
+                "paso": true,
+                "detalle": "nulos=0"
+              },
+              {
+                "regla": "target_valores_validos",
+                "paso": true,
+                "detalle": "valores encontrados={0, 1}"
+              },
+              {
+                "regla": "variables_fisicas_no_negativas",
+                "paso": true,
+                "detalle": "ok"
+              },
+              {
+                "regla": "tipos_maquina_validos",
+                "paso": true,
+                "detalle": "tipos encontrados={'L', 'M', 'H'}, validos={'L', 'M', 'H'}"
+              },
+              {
+                "regla": "temperatura_aire_en_rango",
+                "paso": true,
+                "detalle": "fuera_de_rango=0, rango={'min': 250, 'max': 400}"
+              },
+              {
+                "regla": "temperatura_proceso_en_rango",
+                "paso": true,
+                "detalle": "fuera_de_rango=0, rango={'min': 250, 'max': 450}"
+              },
+              {
+                "regla": "rpm_en_rango",
+                "paso": true,
+                "detalle": "fuera_de_rango=0, rango={'min': 100, 'max': 5000}"
+              },
+              {
+                "regla": "proceso_mayor_igual_ambiente",
+                "paso": true,
+                "detalle": "filas_con_proceso_menor_que_ambiente=0"
+              }
+            ]
+          },
+          "fue_bloqueado": true,
+          "reglas_fallidas": [
+            "missing_bajo_control"
+          ],
+          "timestamp": "2026-08-31T02:12:19.370841+00:00"
+        },
+        {
+          "tipo_contaminacion": "duplicated_rows",
+          "detalles_contaminacion": {
+            "tipo": "duplicated_rows",
+            "descripcion": "Añade registros idénticos",
+            "cantidad_duplicada": 500,
+            "filas_totales_duplicadas": 500,
+            "tasa_duplicados": 0.0476,
+            "tamaño_resultante": 10500
+          },
+          "tamaño_batch": 10500,
+          "validacion": {
+            "batch": "contaminado_duplicated_rows",
+            "timestamp": "2026-08-30T20:12:19.398234",
+            "paso_general": false,
+            "reglas": [
+              {
+                "regla": "minimo_filas",
+                "paso": true,
+                "detalle": "filas=10500, minimo=1000"
+              },
+              {
+                "regla": "estructura_completa",
+                "paso": true,
+                "detalle": "ok"
+              },
+              {
+                "regla": "duplicados_bajo_control",
+                "paso": false,
+                "detalle": "tasa=0.0476, maximo=0.01"
+              },
+              {
+                "regla": "missing_bajo_control",
+                "paso": true,
+                "detalle": "tasa=0.0000, maximo=0.05"
+              },
+              {
+                "regla": "target_sin_nulos",
+                "paso": true,
+                "detalle": "nulos=0"
+              },
+              {
+                "regla": "target_valores_validos",
+                "paso": true,
+                "detalle": "valores encontrados={0, 1}"
+              },
+              {
+                "regla": "variables_fisicas_no_negativas",
+                "paso": true,
+                "detalle": "ok"
+              },
+              {
+                "regla": "tipos_maquina_validos",
+                "paso": true,
+                "detalle": "tipos encontrados={'L', 'M', 'H'}, validos={'L', 'M', 'H'}"
+              },
+              {
+                "regla": "temperatura_aire_en_rango",
+                "paso": true,
+                "detalle": "fuera_de_rango=0, rango={'min': 250, 'max': 400}"
+              },
+              {
+                "regla": "temperatura_proceso_en_rango",
+                "paso": true,
+                "detalle": "fuera_de_rango=0, rango={'min': 250, 'max': 450}"
+              },
+              {
+                "regla": "rpm_en_rango",
+                "paso": true,
+                "detalle": "fuera_de_rango=0, rango={'min': 100, 'max': 5000}"
+              },
+              {
+                "regla": "proceso_mayor_igual_ambiente",
+                "paso": true,
+                "detalle": "filas_con_proceso_menor_que_ambiente=0"
+              }
+            ]
+          },
+          "fue_bloqueado": true,
+          "reglas_fallidas": [
+            "duplicados_bajo_control"
+          ],
+          "timestamp": "2026-08-31T02:12:19.399007+00:00"
+        },
+        {
+          "tipo_contaminacion": "extreme_outliers",
+          "detalles_contaminacion": {
+            "tipo": "extreme_outliers",
+            "descripcion": "Introduce valores físicamente imposibles",
+            "cantidades_por_tipo": [
+              "Air temp negativo: 50",
+              "RPM negativo: 50",
+              "Torque negativo: 30",
+              "Process < Air temp: 40"
+            ],
+            "total_contaminado": 170,
+            "detalles": [
+              "Air temperature [K]: 50 valores a -50K (imposible)",
+              "Rotational speed [rpm]: 50 valores a -1000 (negativo)",
+              "Torque [Nm]: 30 valores a -500 (negativo)",
+              "Process temp < Air temp: 40 filas (violación física)"
+            ]
+          },
+          "tamaño_batch": 10000,
+          "validacion": {
+            "batch": "contaminado_extreme_outliers",
+            "timestamp": "2026-08-30T20:12:19.416644",
+            "paso_general": false,
+            "reglas": [
+              {
+                "regla": "minimo_filas",
+                "paso": true,
+                "detalle": "filas=10000, minimo=1000"
+              },
+              {
+                "regla": "estructura_completa",
+                "paso": true,
+                "detalle": "ok"
+              },
+              {
+                "regla": "duplicados_bajo_control",
+                "paso": true,
+                "detalle": "tasa=0.0000, maximo=0.01"
+              },
+              {
+                "regla": "missing_bajo_control",
+                "paso": true,
+                "detalle": "tasa=0.0000, maximo=0.05"
+              },
+              {
+                "regla": "target_sin_nulos",
+                "paso": true,
+                "detalle": "nulos=0"
+              },
+              {
+                "regla": "target_valores_validos",
+                "paso": true,
+                "detalle": "valores encontrados={0, 1}"
+              },
+              {
+                "regla": "variables_fisicas_no_negativas",
+                "paso": false,
+                "detalle": "columnas con negativos=['Rotational speed [rpm]', 'Torque [Nm]']"
+              },
+              {
+                "regla": "tipos_maquina_validos",
+                "paso": true,
+                "detalle": "tipos encontrados={'L', 'M', 'H'}, validos={'L', 'M', 'H'}"
+              },
+              {
+                "regla": "temperatura_aire_en_rango",
+                "paso": false,
+                "detalle": "fuera_de_rango=50, rango={'min': 250, 'max': 400}"
+              },
+              {
+                "regla": "temperatura_proceso_en_rango",
+                "paso": false,
+                "detalle": "fuera_de_rango=19, rango={'min': 250, 'max': 450}"
+              },
+              {
+                "regla": "rpm_en_rango",
+                "paso": false,
+                "detalle": "fuera_de_rango=50, rango={'min': 100, 'max': 5000}"
+              },
+              {
+                "regla": "proceso_mayor_igual_ambiente",
+                "paso": false,
+                "detalle": "filas_con_proceso_menor_que_ambiente=40"
+              }
+            ]
+          },
+          "fue_bloqueado": true,
+          "reglas_fallidas": [
+            "variables_fisicas_no_negativas",
+            "temperatura_aire_en_rango",
+            "temperatura_proceso_en_rango",
+            "rpm_en_rango",
+            "proceso_mayor_igual_ambiente"
+          ],
+          "timestamp": "2026-08-31T02:12:19.417899+00:00"
+        },
+        {
+          "tipo_contaminacion": "incorrect_datatype",
+          "detalles_contaminacion": {
+            "tipo": "incorrect_datatype",
+            "descripcion": "Introduce strings en columnas numéricas",
+            "columnas_afectadas": [
+              "Air temperature [K]",
+              "Rotational speed [rpm]"
+            ],
+            "total_celdas_contaminadas": 35,
+            "detalles": [
+              "Air temperature [K]: 20 valores cambiados a strings",
+              "Rotational speed [rpm]: 15 valores cambiados a strings"
+            ]
+          },
+          "tamaño_batch": 10000,
+          "validacion": {
+            "paso_general": false,
+            "reglas": [
+              {
+                "regla": "validación_imposible_tipos_o_schema_incorrecto",
+                "paso": false,
+                "detalle": "'<' not supported between instances of 'str' and 'int'"
+              }
+            ],
+            "batch_name": "contaminado_incorrect_datatype"
+          },
+          "fue_bloqueado": true,
+          "reglas_fallidas": [
+            "validación_imposible_tipos_o_schema_incorrecto"
+          ],
+          "timestamp": "2026-08-31T02:12:19.429848+00:00"
+        },
+        {
+          "tipo_contaminacion": "unknown_category",
+          "detalles_contaminacion": {
+            "tipo": "unknown_category",
+            "descripcion": "Introduce categorías no vistas en training",
+            "categorias_validas": [
+              "L",
+              "M",
+              "H"
+            ],
+            "categorias_nuevas_introducidas": [
+              "UNKNOWN",
+              "X",
+              "EXPERIMENTAL"
+            ],
+            "cantidad_registros_afectados": 60,
+            "detalles": [
+              "Se introdujeron 3 categorías nuevas"
+            ]
+          },
+          "tamaño_batch": 10000,
+          "validacion": {
+            "batch": "contaminado_unknown_category",
+            "timestamp": "2026-08-30T20:12:19.441351",
+            "paso_general": false,
+            "reglas": [
+              {
+                "regla": "minimo_filas",
+                "paso": true,
+                "detalle": "filas=10000, minimo=1000"
+              },
+              {
+                "regla": "estructura_completa",
+                "paso": true,
+                "detalle": "ok"
+              },
+              {
+                "regla": "duplicados_bajo_control",
+                "paso": true,
+                "detalle": "tasa=0.0000, maximo=0.01"
+              },
+              {
+                "regla": "missing_bajo_control",
+                "paso": true,
+                "detalle": "tasa=0.0000, maximo=0.05"
+              },
+              {
+                "regla": "target_sin_nulos",
+                "paso": true,
+                "detalle": "nulos=0"
+              },
+              {
+                "regla": "target_valores_validos",
+                "paso": true,
+                "detalle": "valores encontrados={0, 1}"
+              },
+              {
+                "regla": "variables_fisicas_no_negativas",
+                "paso": true,
+                "detalle": "ok"
+              },
+              {
+                "regla": "tipos_maquina_validos",
+                "paso": false,
+                "detalle": "tipos encontrados={'UNKNOWN', 'M', 'H', 'L', 'EXPERIMENTAL', 'X'}, validos={'L', 'M', 'H'}"
+              },
+              {
+                "regla": "temperatura_aire_en_rango",
+                "paso": true,
+                "detalle": "fuera_de_rango=0, rango={'min': 250, 'max': 400}"
+              },
+              {
+                "regla": "temperatura_proceso_en_rango",
+                "paso": true,
+                "detalle": "fuera_de_rango=0, rango={'min': 250, 'max': 450}"
+              },
+              {
+                "regla": "rpm_en_rango",
+                "paso": true,
+                "detalle": "fuera_de_rango=0, rango={'min': 100, 'max': 5000}"
+              },
+              {
+                "regla": "proceso_mayor_igual_ambiente",
+                "paso": true,
+                "detalle": "filas_con_proceso_menor_que_ambiente=0"
+              }
+            ]
+          },
+          "fue_bloqueado": true,
+          "reglas_fallidas": [
+            "tipos_maquina_validos"
+          ],
+          "timestamp": "2026-08-31T02:12:19.442178+00:00"
+        },
+        {
+          "tipo_contaminacion": "schema_modification",
+          "detalles_contaminacion": {
+            "tipo": "schema_modification",
+            "descripcion": "Modifica estructura del dataset",
+            "cambios_realizados": [
+              "Columna eliminada: 'Tool wear [min]'",
+              "Columna renombrada: 'Type' → 'MachineType'",
+              "Columna nueva añadida: 'extra_column' (no esperada)"
+            ],
+            "columnas_esperadas_faltantes": [
+              "Tool wear [min]",
+              "Type"
+            ],
+            "columnas_nuevas": [
+              "extra_column"
+            ]
+          },
+          "tamaño_batch": 10000,
+          "validacion": {
+            "paso_general": false,
+            "reglas": [
+              {
+                "regla": "validación_imposible_tipos_o_schema_incorrecto",
+                "paso": false,
+                "detalle": "'Type'"
+              }
+            ],
+            "batch_name": "contaminado_schema_modification"
+          },
+          "fue_bloqueado": true,
+          "reglas_fallidas": [
+            "validación_imposible_tipos_o_schema_incorrecto"
+          ],
+          "timestamp": "2026-08-31T02:12:19.451458+00:00"
+        }
+      ]
+    }
+  }
+}

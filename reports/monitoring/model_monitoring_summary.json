@@ -1,17 +1,17 @@
 {
-  "timestamp_calculo": "2026-08-30T00:12:14.168380+00:00",
+  "timestamp_calculo": "2026-09-02T21:52:12.327213+00:00",
   "model_uri": "models:/AI4I_LOF_Anomaly_Detector/5",
   "monitoreo_en_vivo": {
     "descripcion": "Calculado sobre las predicciones reales de la API (sin ground truth)",
-    "total_predicciones": 1,
-    "total_anomalias": 0,
-    "anomaly_rate": 0.0,
+    "total_predicciones": 25,
+    "total_anomalias": 12,
+    "anomaly_rate": 0.48,
     "distribucion_anomaly_score": {
       "minimo": -0.1995,
-      "maximo": -0.1995,
-      "media": -0.1995,
-      "mediana": -0.1995,
-      "desviacion_estandar": 0.0
+      "maximo": 2.2907,
+      "media": 0.3663,
+      "mediana": -0.1417,
+      "desviacion_estandar": 0.786
     }
   },
   "evaluacion_offline_con_ground_truth": {

@@ -1,0 +1,193 @@
+============================================================
+GUIA RAPIDA - SIMULACIONES P Y Q
+AI4I MLOps - Windows PowerShell
+============================================================
+
+IMPORTANTE:
+Todos los comandos deben ejecutarse desde la carpeta raíz
+del proyecto ai4i-mlops.
+
+
+============================================================
+1. ENTRAR AL PROYECTO
+============================================================
+
+cd "RUTA\AL\PROYECTO\ai4i-mlops"
+
+Verificar:
+
+Get-Location
+
+La ruta debe terminar en:
+
+ai4i-mlops
+
+
+============================================================
+2. ACTIVAR EL ENTORNO VIRTUAL
+============================================================
+
+Si el entorno se llama .venv:
+
+.\.venv\Scripts\Activate.ps1
+
+Si se llama venv:
+
+.\venv\Scripts\Activate.ps1
+
+
+============================================================
+3. VERIFICAR LOS DATOS
+============================================================
+
+Ejecutar:
+
+Test-Path "data\processed\validated.csv"
+
+Debe aparecer:
+
+True
+
+Si aparece False, primero ejecutar:
+
+python run_pipeline.py
+
+
+============================================================
+P - SIMULACION DE DETECCION DE DRIFT
+============================================================
+
+Ejecutar:
+
+python src/monitoring/simulate_production_drift.py
+
+
+RESULTADO ESPERADO:
+
+BATCH 1 (LEVE)
+Estado: OK
+
+BATCH 2 (MODERADO)
+Estado: WARNING
+
+BATCH 3 (SEVERO)
+Estado: ALERT
+
+
+El reporte debe quedar en:
+
+reports\monitoring\drift_simulation_report.json
+
+
+VERIFICAR RESULTADOS:
+
+(Get-Content "reports\monitoring\drift_simulation_report.json" |
+ConvertFrom-Json).batches |
+Select-Object `
+@{N='batch';E={$_.batch_numero}}, `
+@{N='psi';E={$_.psi_promedio}}, `
+@{N='estado';E={$_.estado_global}}
+
+
+Se debe observar:
+
+Batch 1 -> OK
+Batch 2 -> WARNING
+Batch 3 -> ALERT
+
+
+============================================================
+Q - SIMULACION DE CONTAMINACION DE CALIDAD
+============================================================
+
+Ejecutar:
+
+python src/data_quality/simulate_quality_issues.py
+
+
+La simulacion prueba:
+
+1. Missing Values
+2. Duplicated Rows
+3. Extreme Outliers
+4. Incorrect Datatype
+5. Unknown Category
+6. Schema Modification
+
+
+RESULTADO ESPERADO:
+
+Todas las contaminaciones deben ser:
+
+DETECTADAS Y BLOQUEADAS
+
+
+El reporte debe quedar en:
+
+reports\monitoring\quality_issues_simulation_report.json
+
+
+VERIFICAR RESULTADOS:
+
+(Get-Content "reports\monitoring\quality_issues_simulation_report.json" |
+ConvertFrom-Json).contamination_results |
+Select-Object tipo, resultado
+
+
+============================================================
+EJECUTAR P Y Q JUNTOS
+============================================================
+
+También se pueden ejecutar las dos simulaciones automáticamente:
+
+python run_simulations_pq.py
+
+
+============================================================
+VERIFICACION FINAL
+============================================================
+
+Ejecutar:
+
+Test-Path "reports\monitoring\drift_simulation_report.json"
+
+Test-Path "reports\monitoring\quality_issues_simulation_report.json"
+
+Ambos comandos deben devolver:
+
+True
+
+
+============================================================
+SI ALGO FALLA
+============================================================
+
+1. Verificar que están dentro de ai4i-mlops:
+
+Get-Location
+
+
+2. Verificar que el entorno virtual está activado.
+
+
+3. Verificar que validated.csv existe:
+
+Test-Path "data\processed\validated.csv"
+
+
+4. Si no existe, ejecutar:
+
+python run_pipeline.py
+
+
+============================================================
+RESULTADO FINAL
+============================================================
+
+P:
+OK -> WARNING -> ALERT
+drift_simulation_report.json creado correctamente.
+
+Q:
+Todas las contaminaciones detectadas y bloqueadas.
+quality_issues_simulation_report.json creado correctamente.

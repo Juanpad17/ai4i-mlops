@@ -13,7 +13,7 @@ La API en vivo (reports/monitoring/production_log.jsonl) no tiene
 ground truth (Machine failure), porque un sensor real no sabe si
 hubo falla en el momento de la lectura. Por eso, la evolucion de
 falsos positivos se calcula aparte, de forma offline, usando el
-dataset validado completo (data/processed/validated.csv), que si
+conjunto de validacion (data/processed/validation.csv), que si
 tiene la columna Machine failure real.
 """
 
@@ -28,7 +28,7 @@ from src.features.build_features import build_features
 
 
 PRODUCTION_LOG_PATH = Path("reports/monitoring/production_log.jsonl")
-REFERENCE_PATH = Path("data/processed/validated.csv")
+REFERENCE_PATH = Path("data/processed/validation.csv")
 MODEL_SUMMARY_PATH = Path("reports/monitoring/model_monitoring_summary.json")
 
 TRACKING_URI = "http://localhost:5000"
@@ -140,7 +140,7 @@ def analizar_modelo() -> dict:
             **metricas_produccion,
         },
         "evaluacion_offline_con_ground_truth": {
-            "descripcion": "Calculado sobre data/processed/validated.csv, que si tiene Machine failure real",
+            "descripcion": "Calculado sobre data/processed/validation.csv, que si tiene Machine failure real",
             **metricas_offline,
         },
     }

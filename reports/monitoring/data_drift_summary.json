@@ -1,60 +1,68 @@
 {
-  "timestamp_calculo": "2026-08-30T00:06:08.575488+00:00",
+  "timestamp_calculo": "2026-09-02T21:51:59.955860+00:00",
   "filas_referencia": 9661,
-  "filas_produccion": 1,
+  "filas_produccion": 25,
   "columnas_analizadas": 9,
   "columnas_con_drift": [
+    "Air temperature [K]",
+    "Process temperature [K]",
+    "Rotational speed [rpm]",
+    "Torque [Nm]",
+    "Tool wear [min]",
+    "temperature_difference",
+    "mechanical_power",
+    "wear_strain",
     "Type"
   ],
   "hay_drift_general": true,
   "detalle_por_columna": [
     {
       "columna": "Air temperature [K]",
-      "ks_statistic": 0.4986,
-      "p_value": 1.0,
-      "drift_detectado": false
+      "ks_statistic": 0.3306,
+      "p_value": 0.0062,
+      "drift_detectado": true
     },
     {
       "columna": "Process temperature [K]",
-      "ks_statistic": 0.4983,
-      "p_value": 1.0,
-      "drift_detectado": false
+      "ks_statistic": 0.4278,
+      "p_value": 0.0001,
+      "drift_detectado": true
     },
     {
       "columna": "Rotational speed [rpm]",
       "ks_statistic": 0.5189,
-      "p_value": 0.9623,
-      "drift_detectado": false
+      "p_value": 0.0,
+      "drift_detectado": true
     },
     {
       "columna": "Torque [Nm]",
-      "ks_statistic": 0.5049,
-      "p_value": 0.9903,
-      "drift_detectado": false
+      "ks_statistic": 0.5773,
+      "p_value": 0.0,
+      "drift_detectado": true
     },
     {
       "columna": "Tool wear [min]",
       "ks_statistic": 0.945,
-      "p_value": 0.1101,
-      "drift_detectado": false
+      "p_value": 0.0,
+      "drift_detectado": true
     },
     {
       "columna": "temperature_difference",
-      "ks_statistic": 0.5282,
-      "p_value": 0.9437,
-      "drift_detectado": false
+      "ks_statistic": 0.5441,
+      "p_value": 0.0,
+      "drift_detectado": true
     },
     {
       "columna": "mechanical_power",
-      "ks_statistic": 0.5157,
-      "p_value": 0.9687,
-      "drift_detectado": false
+      "ks_statistic": 0.6358,
+      "p_value": 0.0,
+      "drift_detectado": true
     },
     {
       "columna": "wear_strain",
       "ks_statistic": 0.947,
-      "p_value": 0.1062,
-      "drift_detectado": false
+      "p_value": 0.0,
+      "drift_detectado": true
     },
     {
       "columna": "Type",
@@ -64,9 +72,10 @@
         "H": 0.1016
       },
       "proporciones_produccion": {
-        "M": 1.0
+        "L": 0.96,
+        "M": 0.04
       },
-      "diferencia_maxima_proporcion": 0.6984,
+      "diferencia_maxima_proporcion": 0.3633,
       "drift_detectado": true
     }
   ]

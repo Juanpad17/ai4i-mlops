@@ -1,0 +1,333 @@
+[1mdiff --git a/reports/data_quality/gate_log.jsonl b/reports/data_quality/gate_log.jsonl[m
+[1mindex ff8a508..788d246 100644[m
+[1m--- a/reports/data_quality/gate_log.jsonl[m
+[1m+++ b/reports/data_quality/gate_log.jsonl[m
+[36m@@ -5,9 +5,6 @@[m
+ {"batch": "raw_completo", "timestamp": "2026-08-26T09:59:08.177899", "paso_general": true, "reglas": [{"regla": "minimo_filas", "paso": true, "detalle": "filas=10000, minimo=1000"}, {"regla": "estructura_completa", "paso": true, "detalle": "ok"}, {"regla": "duplicados_bajo_control", "paso": true, "detalle": "tasa=0.0000, maximo=0.01"}, {"regla": "target_sin_nulos", "paso": true, "detalle": "nulos=0"}, {"regla": "target_valores_validos", "paso": true, "detalle": "valores encontrados={0, 1}"}, {"regla": "variables_fisicas_no_negativas", "paso": true, "detalle": "ok"}]}[m
+ {"batch": "raw_completo", "timestamp": "2026-08-26T16:01:45.023784", "paso_general": true, "reglas": [{"regla": "minimo_filas", "paso": true, "detalle": "filas=10000, minimo=1000"}, {"regla": "estructura_completa", "paso": true, "detalle": "ok"}, {"regla": "duplicados_bajo_control", "paso": true, "detalle": "tasa=0.0000, maximo=0.01"}, {"regla": "target_sin_nulos", "paso": true, "detalle": "nulos=0"}, {"regla": "target_valores_validos", "paso": true, "detalle": "valores encontrados={0, 1}"}, {"regla": "variables_fisicas_no_negativas", "paso": true, "detalle": "ok"}]}[m
+ {"batch": "raw_completo", "timestamp": "2026-08-26T16:27:19.261859", "paso_general": true, "reglas": [{"regla": "minimo_filas", "paso": true, "detalle": "filas=10000, minimo=1000"}, {"regla": "estructura_completa", "paso": true, "detalle": "ok"}, {"regla": "duplicados_bajo_control", "paso": true, "detalle": "tasa=0.0000, maximo=0.01"}, {"regla": "target_sin_nulos", "paso": true, "detalle": "nulos=0"}, {"regla": "target_valores_validos", "paso": true, "detalle": "valores encontrados={0, 1}"}, {"regla": "variables_fisicas_no_negativas", "paso": true, "detalle": "ok"}]}[m
+[31m-{"batch": "raw_completo", "timestamp": "2026-08-26T17:10:26.871702", "paso_general": true, "reglas": [{"regla": "minimo_filas", "paso": true, "detalle": "filas=10000, minimo=1000"}, {"regla": "estructura_completa", "paso": true, "detalle": "ok"}, {"regla": "duplicados_bajo_control", "paso": true, "detalle": "tasa=0.0000, maximo=0.01"}, {"regla": "target_sin_nulos", "paso": true, "detalle": "nulos=0"}, {"regla": "target_valores_validos", "paso": true, "detalle": "valores encontrados={0, 1}"}, {"regla": "variables_fisicas_no_negativas", "paso": true, "detalle": "ok"}]}[m
+[31m-{"batch": "raw_completo", "timestamp": "2026-08-26T17:24:25.915582", "paso_general": true, "reglas": [{"regla": "minimo_filas", "paso": true, "detalle": "filas=10000, minimo=1000"}, {"regla": "estructura_completa", "paso": true, "detalle": "ok"}, {"regla": "duplicados_bajo_control", "paso": true, "detalle": "tasa=0.0000, maximo=0.01"}, {"regla": "target_sin_nulos", "paso": true, "detalle": "nulos=0"}, {"regla": "target_valores_validos", "paso": true, "detalle": "valores encontrados={0, 1}"}, {"regla": "variables_fisicas_no_negativas", "paso": true, "detalle": "ok"}]}[m
+[31m-{"batch": "raw_completo", "timestamp": "2026-08-26T17:53:26.563439", "paso_general": true, "reglas": [{"regla": "minimo_filas", "paso": true, "detalle": "filas=10000, minimo=1000"}, {"regla": "estructura_completa", "paso": true, "detalle": "ok"}, {"regla": "duplicados_bajo_control", "paso": true, "detalle": "tasa=0.0000, maximo=0.01"}, {"regla": "target_sin_nulos", "paso": true, "detalle": "nulos=0"}, {"regla": "target_valores_validos", "paso": true, "detalle": "valores encontrados={0, 1}"}, {"regla": "variables_fisicas_no_negativas", "paso": true, "detalle": "ok"}]}[m
+ {"batch": "raw_completo", "timestamp": "2026-08-26T16:48:36.051447", "paso_general": true, "reglas": [{"regla": "minimo_filas", "paso": true, "detalle": "filas=10000, minimo=1000"}, {"regla": "estructura_completa", "paso": true, "detalle": "ok"}, {"regla": "duplicados_bajo_control", "paso": true, "detalle": "tasa=0.0000, maximo=0.01"}, {"regla": "target_sin_nulos", "paso": true, "detalle": "nulos=0"}, {"regla": "target_valores_validos", "paso": true, "detalle": "valores encontrados={0, 1}"}, {"regla": "variables_fisicas_no_negativas", "paso": true, "detalle": "ok"}]}[m
+ {"batch": "raw_completo", "timestamp": "2026-08-28T12:27:22.870312", "paso_general": true, "reglas": [{"regla": "minimo_filas", "paso": true, "detalle": "filas=10000, minimo=1000"}, {"regla": "estructura_completa", "paso": true, "detalle": "ok"}, {"regla": "duplicados_bajo_control", "paso": true, "detalle": "tasa=0.0000, maximo=0.01"}, {"regla": "target_sin_nulos", "paso": true, "detalle": "nulos=0"}, {"regla": "target_valores_validos", "paso": true, "detalle": "valores encontrados={0, 1}"}, {"regla": "variables_fisicas_no_negativas", "paso": true, "detalle": "ok"}]}[m
+ {"batch": "raw_completo", "timestamp": "2026-08-28T12:42:42.633930", "paso_general": true, "reglas": [{"regla": "minimo_filas", "paso": true, "detalle": "filas=10000, minimo=1000"}, {"regla": "estructura_completa", "paso": true, "detalle": "ok"}, {"regla": "duplicados_bajo_control", "paso": true, "detalle": "tasa=0.0000, maximo=0.01"}, {"regla": "target_sin_nulos", "paso": true, "detalle": "nulos=0"}, {"regla": "target_valores_validos", "paso": true, "detalle": "valores encontrados={0, 1}"}, {"regla": "variables_fisicas_no_negativas", "paso": true, "detalle": "ok"}]}[m
+[1mdiff --git a/reports/monitoring/data_drift_summary.json b/reports/monitoring/data_drift_summary.json[m
+[1mdeleted file mode 100644[m
+[1mindex a3f7bc5..0000000[m
+[1m--- a/reports/monitoring/data_drift_summary.json[m
+[1m+++ /dev/null[m
+[36m@@ -1,73 +0,0 @@[m
+[31m-{[m
+[31m-  "timestamp_calculo": "2026-08-30T00:06:08.575488+00:00",[m
+[31m-  "filas_referencia": 9661,[m
+[31m-  "filas_produccion": 1,[m
+[31m-  "columnas_analizadas": 9,[m
+[31m-  "columnas_con_drift": [[m
+[31m-    "Type"[m
+[31m-  ],[m
+[31m-  "hay_drift_general": true,[m
+[31m-  "detalle_por_columna": [[m
+[31m-    {[m
+[31m-      "columna": "Air temperature [K]",[m
+[31m-      "ks_statistic": 0.4986,[m
+[31m-      "p_value": 1.0,[m
+[31m-      "drift_detectado": false[m
+[31m-    },[m
+[31m-    {[m
+[31m-      "columna": "Process temperature [K]",[m
+[31m-      "ks_statistic": 0.4983,[m
+[31m-      "p_value": 1.0,[m
+[31m-      "drift_detectado": false[m
+[31m-    },[m
+[31m-    {[m
+[31m-      "columna": "Rotational speed [rpm]",[m
+[31m-      "ks_statistic": 0.5189,[m
+[31m-      "p_value": 0.9623,[m
+[31m-      "drift_detectado": false[m
+[31m-    },[m
+[31m-    {[m
+[31m-      "columna": "Torque [Nm]",[m
+[31m-      "ks_statistic": 0.5049,[m
+[31m-      "p_value": 0.9903,[m
+[31m-      "drift_detectado": false[m
+[31m-    },[m
+[31m-    {[m
+[31m-      "columna": "Tool wear [min]",[m
+[31m-      "ks_statistic": 0.945,[m
+[31m-      "p_value": 0.1101,[m
+[31m-      "drift_detectado": false[m
+[31m-    },[m
+[31m-    {[m
+[31m-      "columna": "temperature_difference",[m
+[31m-      "ks_statistic": 0.5282,[m
+[31m-      "p_value": 0.9437,[m
+[31m-      "drift_detectado": false[m
+[31m-    },[m
+[31m-    {[m
+[31m-      "columna": "mechanical_power",[m
+[31m-      "ks_statistic": 0.5157,[m
+[31m-      "p_value": 0.9687,[m
+[31m-      "drift_detectado": false[m
+[31m-    },[m
+[31m-    {[m
+[31m-      "columna": "wear_strain",[m
+[31m-      "ks_statistic": 0.947,[m
+[31m-      "p_value": 0.1062,[m
+[31m-      "drift_detectado": false[m
+[31m-    },[m
+[31m-    {[m
+[31m-      "columna": "Type",[m
+[31m-      "proporciones_referencia": {[m
+[31m-        "L": 0.5967,[m
+[31m-        "M": 0.3016,[m
+[31m-        "H": 0.1016[m
+[31m-      },[m
+[31m-      "proporciones_produccion": {[m
+[31m-        "M": 1.0[m
+[31m-      },[m
+[31m-      "diferencia_maxima_proporcion": 0.6984,[m
+[31m-      "drift_detectado": true[m
+[31m-    }[m
+[31m-  ][m
+[31m-}[m
+\ No newline at end of file[m
+[1mdiff --git a/reports/monitoring/model_monitoring_summary.json b/reports/monitoring/model_monitoring_summary.json[m
+[1mdeleted file mode 100644[m
+[1mindex 8fd452b..0000000[m
+[1m--- a/reports/monitoring/model_monitoring_summary.json[m
+[1m+++ /dev/null[m
+[36m@@ -1,26 +0,0 @@[m
+[31m-{[m
+[31m-  "timestamp_calculo": "2026-08-30T00:12:14.168380+00:00",[m
+[31m-  "model_uri": "models:/AI4I_LOF_Anomaly_Detector/5",[m
+[31m-  "monitoreo_en_vivo": {[m
+[31m-    "descripcion": "Calculado sobre las predicciones reales de la API (sin ground truth)",[m
+[31m-    "total_predicciones": 1,[m
+[31m-    "total_anomalias": 0,[m
+[31m-    "anomaly_rate": 0.0,[m
+[31m-    "distribucion_anomaly_score": {[m
+[31m-      "minimo": -0.1995,[m
+[31m-      "maximo": -0.1995,[m
+[31m-      "media": -0.1995,[m
+[31m-      "mediana": -0.1995,[m
+[31m-      "desviacion_estandar": 0.0[m
+[31m-    }[m
+[31m-  },[m
+[31m-  "evaluacion_offline_con_ground_truth": {[m
+[31m-    "descripcion": "Calculado sobre data/processed/validated.csv, que si tiene Machine failure real",[m
+[31m-    "total_registros_evaluados": 10000,[m
+[31m-    "verdaderos_positivos": 172,[m
+[31m-    "falsos_positivos": 281,[m
+[31m-    "verdaderos_negativos": 9380,[m
+[31m-    "falsos_negativos": 167,[m
+[31m-    "tasa_falsos_positivos": 0.0291[m
+[31m-  }[m
+[31m-}[m
+\ No newline at end of file[m
+[1mdiff --git a/reports/monitoring/production_log.jsonl b/reports/monitoring/production_log.jsonl[m
+[1mdeleted file mode 100644[m
+[1mindex 97ae0f9..0000000[m
+[1m--- a/reports/monitoring/production_log.jsonl[m
+[1m+++ /dev/null[m
+[36m@@ -1 +0,0 @@[m
+[31m-{"timestamp": "2026-08-29T23:47:49.056802+00:00", "type": "M", "air_temperature_k": 300.0, "process_temperature_k": 310.0, "rotational_speed_rpm": 1500.0, "torque_nm": 40.0, "tool_wear_min": 10.0, "prediction": 0, "anomaly_score": -0.19950834090720515, "model_uri": "models:/AI4I_LOF_Anomaly_Detector/5"}[m
+[1mdiff --git a/reports/monitoring/system_metrics.jsonl b/reports/monitoring/system_metrics.jsonl[m
+[1mdeleted file mode 100644[m
+[1mindex 9a4b25c..0000000[m
+[1m--- a/reports/monitoring/system_metrics.jsonl[m
+[1m+++ /dev/null[m
+[36m@@ -1,7 +0,0 @@[m
+[31m-{"timestamp": "2026-08-29T23:36:08.662471+00:00", "endpoint": "/health", "latency_ms": 33547.8, "status_code": 200, "error": false}[m
+[31m-{"timestamp": "2026-08-29T23:36:09.240349+00:00", "endpoint": "/favicon.ico", "latency_ms": 1.65, "status_code": 404, "error": true}[m
+[31m-{"timestamp": "2026-08-29T23:37:26.806933+00:00", "endpoint": "/health", "latency_ms": 2.97, "status_code": 200, "error": false}[m
+[31m-{"timestamp": "2026-08-29T23:37:28.676836+00:00", "endpoint": "/health", "latency_ms": 2.07, "status_code": 200, "error": false}[m
+[31m-{"timestamp": "2026-08-29T23:37:40.206789+00:00", "endpoint": "/health", "latency_ms": 1.44, "status_code": 200, "error": false}[m
+[31m-{"timestamp": "2026-08-29T23:38:02.001888+00:00", "endpoint": "/health", "latency_ms": 7.11, "status_code": 200, "error": false}[m
+[31m-{"timestamp": "2026-08-29T23:47:49.070289+00:00", "endpoint": "/predict", "latency_ms": 22582.1, "status_code": 200, "error": false}[m
+[1mdiff --git a/reports/monitoring/system_summary.json b/reports/monitoring/system_summary.json[m
+[1mdeleted file mode 100644[m
+[1mindex 63ca16f..0000000[m
+[1m--- a/reports/monitoring/system_summary.json[m
+[1m+++ /dev/null[m
+[36m@@ -1,10 +0,0 @@[m
+[31m-{[m
+[31m-  "timestamp_calculo": "2026-08-29T23:55:23.612536+00:00",[m
+[31m-  "total_requests": 7,[m
+[31m-  "latency_ms_promedio": 8020.73,[m
+[31m-  "latency_ms_p95": 30258.09,[m
+[31m-  "throughput_requests_por_minuto": 0.6,[m
+[31m-  "total_errores": 1,[m
+[31m-  "error_rate": 0.1429,[m
+[31m-  "availability": 1.0[m
+[31m-}[m
+\ No newline at end of file[m
+[1mdiff --git a/src/api/app.py b/src/api/app.py[m
+[1mindex 9a50b1b..4cf6f3c 100644[m
+[1m--- a/src/api/app.py[m
+[1m+++ b/src/api/app.py[m
+[36m@@ -8,13 +8,6 @@[m [mfrom pydantic import BaseModel, Field[m
+ [m
+ from src.features.build_features import build_features[m
+ [m
+[31m-import time[m
+[31m-import json[m
+[31m-from datetime import datetime, timezone[m
+[31m-from pathlib import Path[m
+[31m-[m
+[31m-from fastapi import Request [m
+[31m-[m
+ [m
+ TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://localhost:5000")[m
+ MODEL_URI = os.getenv([m
+[36m@@ -44,53 +37,6 @@[m [mapp = FastAPI([m
+     version="1.0.0",[m
+ )[m
+ [m
+[31m-# ---------------------------------------------------------------[m
+[31m-# O1. System Monitoring[m
+[31m-# Middleware que envuelve TODOS los endpoints automaticamente.[m
+[31m-# Mide latency (tiempo de respuesta), y registra cada request[m
+[31m-# para poder calcular despues throughput, error rate y disponibilidad.[m
+[31m-# ---------------------------------------------------------------[m
+[31m-[m
+[31m-SYSTEM_LOG_PATH = Path("reports/monitoring/system_metrics.jsonl")[m
+[31m-SYSTEM_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)[m
+[31m-[m
+[31m-PRODUCTION_LOG_PATH = Path("reports/monitoring/production_log.jsonl")[m
+[31m-PRODUCTION_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)[m
+[31m-[m
+[31m-@app.middleware("http")[m
+[31m-async def system_monitoring_middleware(request: Request, call_next):[m
+[31m-    inicio = time.perf_counter()[m
+[31m-[m
+[31m-    try:[m
+[31m-        response = await call_next(request)[m
+[31m-        status_code = response.status_code[m
+[31m-        error = status_code >= 400[m
+[31m-    except Exception:[m
+[31m-        # Si el endpoint revienta con una excepcion no manejada,[m
+[31m-        # igual queremos registrar el error antes de relanzarla.[m
+[31m-        status_code = 500[m
+[31m-        error = True[m
+[31m-        _guardar_metrica_sistema(request.url.path, inicio, status_code, error)[m
+[31m-        raise[m
+[31m-[m
+[31m-    _guardar_metrica_sistema(request.url.path, inicio, status_code, error)[m
+[31m-    return response[m
+[31m-[m
+[31m-[m
+[31m-def _guardar_metrica_sistema(path: str, inicio: float, status_code: int, error: bool) -> None:[m
+[31m-    latency_ms = (time.perf_counter() - inicio) * 1000[m
+[31m-[m
+[31m-    evento = {[m
+[31m-        "timestamp": datetime.now(timezone.utc).isoformat(),[m
+[31m-        "endpoint": path,[m
+[31m-        "latency_ms": round(latency_ms, 2),[m
+[31m-        "status_code": status_code,[m
+[31m-        "error": error,[m
+[31m-    }[m
+[31m-[m
+[31m-    with open(SYSTEM_LOG_PATH, "a", encoding="utf-8") as f:[m
+[31m-        f.write(json.dumps(evento, ensure_ascii=False) + "\n")[m
+[31m-[m
+ [m
+ @lru_cache(maxsize=1)[m
+ def get_model():[m
+[36m@@ -139,34 +85,9 @@[m [mdef predict(reading: MachineReading) -> PredictionResponse:[m
+             detail=f"No fue posible generar la prediccion: {error}",[m
+         ) from error[m
+ [m
+[31m-    # O2/O3 - Data Monitoring y Model Monitoring[m
+[31m-    # Registramos cada prediccion real: los inputs (para comparar[m
+[31m-    # su distribucion contra el dataset de referencia mas adelante)[m
+[31m-    # y el resultado del modelo (para calcular AnomalyRate_t y la[m
+[31m-    # distribucion del anomaly_score).[m
+[31m-    _guardar_prediccion(reading, prediction, anomaly_score)[m
+[31m-[m
+     return PredictionResponse([m
+         prediction=prediction,[m
+         label="anomaly" if prediction else "normal",[m
+         anomaly_score=anomaly_score,[m
+         model_uri=MODEL_URI,[m
+[31m-    )[m
+[31m-[m
+[31m-[m
+[31m-def _guardar_prediccion(reading: MachineReading, prediction: int, anomaly_score: float) -> None:[m
+[31m-    evento = {[m
+[31m-        "timestamp": datetime.now(timezone.utc).isoformat(),[m
+[31m-        "type": reading.type,[m
+[31m-        "air_temperature_k": reading.air_temperature_k,[m
+[31m-        "process_temperature_k": reading.process_temperature_k,[m
+[31m-        "rotational_speed_rpm": reading.rotational_speed_rpm,[m
+[31m-        "torque_nm": reading.torque_nm,[m
+[31m-        "tool_wear_min": reading.tool_wear_min,[m
+[31m-        "prediction": prediction,[m
+[31m-        "anomaly_score": anomaly_score,[m
+[31m-        "model_uri": MODEL_URI,[m
+[31m-    }[m
+[31m-[m
+[31m-    with open(PRODUCTION_LOG_PATH, "a", encoding="utf-8") as f:[m
+[31m-        f.write(json.dumps(evento, ensure_ascii=False) + "\n")[m
+\ No newline at end of file[m
+[32m+[m[32m    )[m
+\ No newline at end of file[m
+[1mdiff --git a/src/data_quality/validate.py b/src/data_quality/validate.py[m
+[1mindex a940a0a..64d19bf 100644[m
+[1m--- a/src/data_quality/validate.py[m
+[1m+++ b/src/data_quality/validate.py[m
+[36m@@ -363,27 +363,27 @@[m [mif __name__ == "__main__":[m
+     print(f"filas: {reporte['filas']} | columnas: {reporte['columnas']}")[m
+ [m
+     nulos = reporte['missing_values']['total_celdas_nulas'][m
+[31m-    print(f"1. valores faltantes: {'0 problemas, 0 nulos' if nulos == 0 else f'{nulos} nulos encontrados'}")[m
+[32m+[m[32m    print(f"1. valores faltantes: {'sin problemas, 0 nulos' if nulos == 0 else f'{nulos} nulos encontrados'}")[m
+ [m
+     centinela = reporte['missing_values']['posibles_valores_centinela'][m
+[31m-    print(f"2. faltantes codificados con simbolos: {'0 problemas, ninguno encontrado' if not centinela else centinela}")[m
+[32m+[m[32m    print(f"2. faltantes codificados con simbolos: {'sin problemas, ninguno encontrado' if not centinela else centinela}")[m
+ [m
+     dup = reporte['duplicados']['duplicados_exactos'][m
+[31m-    print(f"3. duplicados: {'0 problemas, 0 duplicados' if dup == 0 else f'{dup} duplicados encontrados'}")[m
+[32m+[m[32m    print(f"3. duplicados: {'sin problemas, 0 duplicados' if dup == 0 else f'{dup} duplicados encontrados'}")[m
+ [m
+     inconsistentes = reporte['valores_imposibles'][m
+[31m-    print(f"4. registros inconsistentes: {'0 problemas, ninguno encontrado' if not inconsistentes else inconsistentes}")[m
+[32m+[m[32m    print(f"4. registros inconsistentes: {'sin problemas, ninguno encontrado' if not inconsistentes else inconsistentes}")[m
+ [m
+     tipos_malos = reporte['tipos']['columnas_no_numericas_inesperadas'][m
+[31m-    print(f"5. tipos incorrectos: {'0 problemas, todos los tipos son correctos' if not tipos_malos else tipos_malos}")[m
+[32m+[m[32m    print(f"5. tipos incorrectos: {'sin problemas, todos los tipos son correctos' if not tipos_malos else tipos_malos}")[m
+ [m
+     cat_raras = reporte['categorias']['Type']['categorias_no_esperadas'][m
+[31m-    print(f"6. categorias inconsistentes: {'0 problemas, solo estan L, M, H' if not cat_raras else cat_raras}")[m
+[32m+[m[32m    print(f"6. categorias inconsistentes: {'sin problemas, solo estan L, M, H' if not cat_raras else cat_raras}")[m
+ [m
+     print(f"7. fechas invalidas: {reporte['fechas_invalidas']}")[m
+ [m
+     imposibles = reporte['valores_imposibles'][m
+[31m-    print(f"8. datos imposibles: {'0 problemas, ninguno encontrado' if not imposibles else imposibles}")[m
+[32m+[m[32m    print(f"8. datos imposibles: {'sin problemas, ninguno encontrado' if not imposibles else imposibles}")[m
+ [m
+     print(f"9. valores extremos (Rotational speed, IQR): {reporte['outliers']['Rotational speed [rpm]']['cantidad_outliers_iqr']} encontrados")[m
+     print(f"10. cardinalidad de Type: {reporte['categorias']['Type']['cardinalidad']} categorias (L, M, H)")[m
+[36m@@ -394,7 +394,7 @@[m [mif __name__ == "__main__":[m
+     print(f"15. gaps temporales: {reporte['gaps_temporales']}")[m
+ [m
+     corr_alta = reporte['correlacion_excesiva']['pares_alta_correlacion'][m
+[31m-    print(f"16. correlacion excesiva: {'0 problemas, ninguna variable redundante' if not corr_alta else corr_alta}")[m
+[32m+[m[32m    print(f"16. correlacion excesiva: {'sin problemas, ninguna variable redundante' if not corr_alta else corr_alta}")[m
+ [m
+ [m
+ [m
+[1mdiff --git a/src/monitoring/data_monitoring.py b/src/monitoring/data_monitoring.py[m
+[1mdeleted file mode 100644[m
+[1mindex 51a909f..0000000[m
+[1m--- a/src/monitoring/data_monitoring.py[m
+[1m+++ /dev/null[m
+[36m@@ -1,204 +0,0 @@[m
+[31m-"""[m
+[31m-Seccion O2 - Data Monitoring[m
+[31m-==============================[m
+[31m-Compara la distribucion de referencia (los datos con los que se[m
+[31m-entreno el modelo, P_reference(X)) contra la dist

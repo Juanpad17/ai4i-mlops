@@ -1,0 +1,5 @@
+
+# Archivos generados localmente
+__pycache__/
+*.pyc
+mlartifacts/

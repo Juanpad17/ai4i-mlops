@@ -34,8 +34,6 @@ import mlflow.sklearn
 
 # train_test_split permite separar datos de entrenamiento
 # y prueba.
-from sklearn.model_selection import train_test_split
-
 # Isolation Forest es un algoritmo diseñado específicamente
 # para detección de anomalías.
 from sklearn.ensemble import IsolationForest
@@ -75,7 +73,8 @@ from src.features.build_features import (
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 # Dataset generado por nuestra etapa de ingesta.
-DATA_PATH = Path("data/processed/validated.csv")
+TRAIN_PATH = Path("data/processed/train.csv")
+VALIDATION_PATH = Path("data/processed/validation.csv")
 
 # Carpeta donde guardaremos artefactos temporales.
 ARTIFACTS_DIR = PROJECT_ROOT / "artifacts"
@@ -117,19 +116,19 @@ DATA_VERSION = "ai4i_uci_601_v1"
 # CARGA DE DATOS
 # ============================================================
 
-def load_data() -> pd.DataFrame:
+def load_data(path: Path) -> pd.DataFrame:
     """
     Carga y normaliza el dataset utilizado por entrenamiento.
     """
 
-    if not DATA_PATH.exists():
+    if not path.exists():
 
         raise FileNotFoundError(
-            f"No se encontró el dataset en: {DATA_PATH}"
+            f"No se encontró el dataset en: {path}. Ejecute primero data/split.py."
         )
 
     # Cargamos el CSV.
-    dataframe = pd.read_csv(DATA_PATH)
+    dataframe = pd.read_csv(path)
 
     return dataframe
 
@@ -283,37 +282,28 @@ def main() -> None:
     # 1. CARGAR DATOS
     # --------------------------------------------------------
 
-    dataframe = load_data()
+    train_dataframe = load_data(TRAIN_PATH)
+    validation_dataframe = load_data(VALIDATION_PATH)
 
     # Separamos las features y el target utilizando la función
     # creada anteriormente.
-    X, y = split_features_target(
-        dataframe
-    )
-    X = build_features(X)
-    print(f"Registros disponibles: {len(X)}")
+    X_train, y_train = split_features_target(train_dataframe)
+    X_validation, y_validation = split_features_target(validation_dataframe)
+    X_train = build_features(X_train)
+    X_validation = build_features(X_validation)
+    print(f"Registros disponibles: {len(X_train) + len(X_validation)}")
 
 
     # --------------------------------------------------------
-    # 2. TRAIN / TEST SPLIT
+    # 2. USAR LOS CONJUNTOS GENERADOS POR data/split.py
     # --------------------------------------------------------
-
-    # Utilizamos stratify para conservar aproximadamente
-    # la misma proporción de fallas en train y test.
-    X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=TEST_SIZE,
-        random_state=RANDOM_SEED,
-        stratify=y,
-    )
 
     print(
         f"Registros entrenamiento: {len(X_train)}"
     )
 
     print(
-        f"Registros prueba: {len(X_test)}"
+        f"Registros validación: {len(X_validation)}"
     )
 
 
@@ -398,8 +388,8 @@ def main() -> None:
         )
 
         mlflow.log_param(
-            "test_size",
-            TEST_SIZE
+            "validation_size",
+            0.20
         )
 
         mlflow.log_param(
@@ -409,7 +399,7 @@ def main() -> None:
 
         mlflow.log_param(
             "feature_set",
-            ",".join(X.columns)
+            ",".join(X_train.columns)
         )
 
 
@@ -435,7 +425,7 @@ def main() -> None:
         #  1  → observación normal
         # -1  → anomalía
         raw_predictions = model.predict(
-            X_test
+            X_validation
         )
 
         # Nuestro target utiliza:
@@ -460,7 +450,7 @@ def main() -> None:
         #
         # mayor score = más anómalo.
         anomaly_scores = -model.decision_function(
-            X_test
+            X_validation
         )
 
 
@@ -469,30 +459,30 @@ def main() -> None:
         # ----------------------------------------------------
 
         precision = precision_score(
-            y_test,
+            y_validation,
             y_pred,
             zero_division=0
         )
 
         recall = recall_score(
-            y_test,
+            y_validation,
             y_pred,
             zero_division=0
         )
 
         f1 = f1_score(
-            y_test,
+            y_validation,
             y_pred,
             zero_division=0
         )
 
         roc_auc = roc_auc_score(
-            y_test,
+            y_validation,
             anomaly_scores
         )
 
         pr_auc = average_precision_score(
-            y_test,
+            y_validation,
             anomaly_scores
         )
 
@@ -561,7 +551,7 @@ def main() -> None:
         # ----------------------------------------------------
 
         confusion_path = save_confusion_matrix(
-            y_test,
+            y_validation,
             y_pred
         )
 
@@ -579,7 +569,7 @@ def main() -> None:
         # Guardamos también Precision, Recall y F1 detallados
         # por clase.
         report = classification_report(
-            y_test,
+            y_validation,
             y_pred,
             output_dict=True,
             zero_division=0

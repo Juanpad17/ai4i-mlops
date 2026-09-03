@@ -1,0 +1,57 @@
+INSTRUCCIONES PARA CORRER LA API EN DOCKER
+===========================================
+
+1) Abrir terminal en la raiz del proyecto.
+
+2) Construir la imagen:
+
+   docker build -t ai4imlops .
+
+3) Ejecutar el contenedor:
+
+   docker run --rm -p 8000:8000 ai4imlops
+
+4) Comprobar la salud de la API:
+
+   http://localhost:8000/health
+
+   o usando curl:
+
+   curl http://localhost:8000/health
+
+5) Comprobar la documentación Swagger:
+
+   http://localhost:8000/docs
+
+6) Probar el servicio de predicción:
+
+   curl -X POST "http://localhost:8000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "type": "L",
+       "air_temperature_k": 298.0,
+       "process_temperature_k": 308.0,
+       "rotational_speed_rpm": 1551.0,
+       "torque_nm": 42.0,
+       "tool_wear_min": 100
+     }'
+
+7) Si quieres ver logs del contenedor:
+
+   docker ps
+   docker logs -f <container_id>
+
+8) Para detener el contenedor:
+
+   docker stop <container_id>
+
+9) Si cambias de modelo, puedes pasarlo como variable de entorno:
+
+   docker run --rm -p 8000:8000 -e MODEL_URI="models:/AI4I_LOF_Anomaly_Detector/6" ai4imlops
+
+10) Servicios expuestos:
+
+    - GET /health
+    - POST /predict
+    - GET /docs
+

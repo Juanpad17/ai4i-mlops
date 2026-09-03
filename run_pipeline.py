@@ -1,3 +1,4 @@
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -50,27 +51,58 @@ def main():
         "3. Filtros y Puertas de Calidad (Generación de validated.csv)"
     )
 
-    # 4. ENTRENAMIENTO MODELO BASE
+    # 4. SPLIT REPRODUCIBLE TRAIN / VALIDATION / TEST
+    run_stage(
+        [python_bin, "data/split.py"],
+        "4. División estratificada 60/20/20 (train, validation, test)"
+    )
+
+    # 5. ENTRENAMIENTO MODELO BASE
     run_stage(
         [python_bin, "src/training/train.py"], 
-        "4. Entrenamiento del Modelo Base (Isolation Forest)"
+        "5. Entrenamiento del Modelo Base (Isolation Forest)"
     )
 
-    # 5. EXPERIMENTACIÓN MASIVA Y COMPARACIÓN
+    # 5. MONITOREO DE DRIFT Y DESEMPEÑO DEL MODELO
+    run_stage(
+        [python_bin, "src/monitoring/data_monitoring.py"],
+        "6. Monitoreo de Drift (Data Monitoring)"
+    )
+
+    run_stage(
+        [python_bin, "src/monitoring/model_monitoring.py"],
+        "7. Monitoreo del Modelo (Model Monitoring)"
+    )
+
+    # 7. EVALUACIÓN DE REENTRENAMIENTO
+    run_stage(
+        [python_bin, "src/monitoring/retraining_gate.py"],
+        "8. Evaluación de Trigger de Retraining"
+    )
+
+    decision_path = Path("reports/monitoring/retraining_decision.json")
+    with decision_path.open("r", encoding="utf-8") as decision_file:
+        retraining_decision = json.load(decision_file)
+
+    if not retraining_decision["decision"]["trigger_retraining"]:
+        print("No se activa retraining. Se detienen experimentación y finalización.")
+        return
+
+    # 8. EXPERIMENTACIÓN MASIVA Y COMPARACIÓN
     run_stage(
         [python_bin, "src/training/experiment.py"], 
-        "5. Comparación Masiva de Modelos en MLflow"
+        "9. Comparación Masiva de Modelos en MLflow"
     )
 
-    # 6. REGISTRO Y FINALIZACIÓN DEL MODELO GANADOR
+    # 9. REGISTRO Y FINALIZACIÓN DEL MODELO GANADOR
     run_stage(
         [python_bin, "src/training/finalize_model.py"], 
-        "6. Cierre de Pipeline y Registro del Modelo Ganador en Producción"
+        "10. Cierre de Pipeline y Registro del Modelo Ganador en Producción"
     )
 
     print("="*60)
     print("🎉 ¡PIPELINE EJECUTADO DE PUNTA A PUNTA DE FORMA IMPECABLE! 🎉")
-    print("Todos los resultados y el modelo final están disponibles en MLflow.")
+    print("Todos los resultados, el modelo final y la decisión de retraining están disponibles.")
     print("="*60)
 
 if __name__ == "__main__":
