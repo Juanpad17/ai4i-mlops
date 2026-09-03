@@ -124,6 +124,10 @@ python src/data_quality/validate.py
 python src/data_quality/quality_gates.py
 ```
 
+Este comando valida el dataset original (`data/raw/ai4i2020.csv`) y, si
+cumple todas las reglas, genera `data/processed/validated.csv`. Cada
+ejecución queda registrada en `reports/data_quality/gate_log.jsonl`.
+
 #### Entrenamiento
 
 ```powershell
@@ -190,21 +194,62 @@ El repositorio incluye simulaciones para mostrar drift y calidad de datos.
 
 ### Ejecutar simulaciones
 
-```powershell
-python run_simulations_pq.py
-```
-
-Esto genera reportes en:
-
-- reports/monitoring/drift_simulation_report.json
-- reports/monitoring/quality_issues_simulation_report.json
-- reports/monitoring/simulaciones_p_q_consolidadas.json
-
-### Simulación de drift específica
+#### Simulación de cambios en producción (drift)
 
 ```powershell
 python src/monitoring/simulate_production_drift.py
 ```
+
+Genera tres batches simulados con severidad progresiva:
+
+- `BATCH 1 - LEVE`: estado `OK`.
+- `BATCH 2 - MODERADA`: estado `WARNING`.
+- `BATCH 3 - SEVERA`: estado `ALERT`.
+
+La detección utiliza Population Stability Index (PSI) y compara cada batch
+contra los datos normales de referencia. Los resultados se guardan en:
+
+- `reports/monitoring/drift_simulation_report.json`
+- `reports/monitoring/batches_comparison.jsonl`
+
+#### Simulación de quality gates
+
+```powershell
+python src/data_quality/simulate_quality_issues.py
+```
+
+Genera batches contaminados con valores faltantes, duplicados, outliers
+extremos, tipos de datos incorrectos, categorías desconocidas y cambios de
+esquema. Cada batch se valida mediante `run_quality_gates()`, la misma lógica
+de [quality_gates.py](src/data_quality/quality_gates.py), y debe ser bloqueado.
+
+Los resultados se guardan en:
+
+- `reports/monitoring/quality_issues_simulation_report.json`
+- `reports/monitoring/contaminated_batches.jsonl`
+- `reports/data_quality/gate_log.jsonl`
+
+El resultado esperado es seis batches bloqueados y una tasa de bloqueo del
+100%.
+
+#### Ejecutar ambas simulaciones
+
+```powershell
+python run_simulations_pq.py
+```
+
+Este script ejecuta consecutivamente la simulación de drift y la simulación de
+quality gates. Requiere que exista `data/processed/validated.csv`, generado
+previamente por `quality_gates.py` o por `run_pipeline.py`.
+
+Además, genera un reporte consolidado en:
+
+- `reports/monitoring/simulaciones_p_q_consolidadas.json`
+
+Los reportes individuales son:
+
+- reports/monitoring/drift_simulation_report.json
+- reports/monitoring/quality_issues_simulation_report.json
 
 ## 7. Monitoreo y estrategia de retraining
 
